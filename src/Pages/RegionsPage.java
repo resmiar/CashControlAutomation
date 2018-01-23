@@ -77,6 +77,21 @@ public class RegionsPage {
 		// TODO Auto-generated method stub
 		return true;
 	}
+
+	public static void editAndCancelRegion() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static boolean checkProperErrorMessage() {
+		// use switch case for 2 scenarios - blank desc and duplicate - use same method
+		return false;
+	}
+
+	public static void addNewWithBlankDescription() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	}
 
