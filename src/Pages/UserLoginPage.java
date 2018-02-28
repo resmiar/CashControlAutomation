@@ -20,7 +20,7 @@ public class UserLoginPage
 	public static void goTo() 
 	{
 	Browser.instance.get("http://192.168.6.197/CCS/");
-	WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+	WebDriverWait wait = new WebDriverWait(Browser.instance,60);
 	wait.until(ExpectedConditions.elementToBeClickable(userName));
 	}
 
@@ -30,6 +30,4 @@ public class UserLoginPage
 	Browser.instance.findElement(password).sendKeys("SFtestuser_sysadmin");
 	Browser.instance.findElement(loginButton).click();
 	}
-	
-	
 }

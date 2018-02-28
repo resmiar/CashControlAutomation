@@ -2,7 +2,10 @@ package Pages;
 
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import Initialization.Browser;
 
 public class CashControlPage {
@@ -13,13 +16,22 @@ public class CashControlPage {
 	static Select ccGroup = new Select(Browser.instance.findElement(ccGroupfield));
 	
 	public static boolean isAt() 
-	{		
-		// TODO Auto-generated method stub
-		return true;
+	{		boolean ccLogin = false;
+		try {
+			Browser.instance.findElement(dateValue);
+	        ccLogin = true;
+	        System.out.println("End of try block"); }
+	    catch(Exception e){
+	    	System.out.println("Inside catch block");
+	    	 ccLogin = false; }
+		return ccLogin;
 	}
 	
 	public static void loginToACCGroup() 
 	{
+		Browser.instance.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(dateValue));
 		ccGroup.selectByIndex(0);
 		Browser.instance.findElement(dateValue).sendKeys("01012018");
 		Browser.instance.findElement(okButton).click();

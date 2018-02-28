@@ -15,6 +15,18 @@ public class DashBoardPage {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public static boolean isAt() {
+		boolean ccLogin = false;
+		try {
+			Browser.instance.findElement(userNameDisplay);
+	        ccLogin = true;
+	        System.out.println("End of try block"); }
+	    catch(Exception e){
+	    	System.out.println("Inside catch block");
+	    	 ccLogin = false; }
+		return ccLogin;
+	}
 
 	public static void logOut() {
 		WebDriverWait wait = new WebDriverWait(Browser.instance,10);

@@ -1,5 +1,7 @@
 package Pages;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -7,7 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import Initialization.Browser;
-import Initialization.RandomString;
+import Initialization.GenerateRandomValue;
 
 public class RegionsPage {
 	static By maintenanceMenu = By.xpath("//a[contains(text(),'Maintenance')]");
@@ -19,29 +21,36 @@ public class RegionsPage {
 	static By exitButton = By.xpath("(//button[@type='button'])[9]");
 	static By regionfield = By.name("txtRegion");
 	static By regionDropdown = By.name("ddlRegions");
-	static String regionName = RandomString.generateRandomStringtest();
+	static String regionName = GenerateRandomValue.generateRandomStringtest();
 	static By confirmYesButton = By.xpath("(//button[@type='button'])[11]");
+	static int errorMessageScenario;
+	static By errorMessageDiv = By.xpath("//div[@class='full-width-form']");
 
 	public static void addNew() {
 		Browser.instance.findElement(addNew).click();
 		Browser.instance.findElement(regionfield).sendKeys(regionName);
 		Browser.instance.findElement(saveButton).click();
-		System.out.println("Region added successfully: " +regionName);
+		System.out.println("Added the region: " +regionName);
 		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(addNew));
 	}
 
 	public static void close() {
+		WebDriverWait wait = new WebDriverWait(Browser.instance,20);
+		wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 		Browser.instance.findElement(exitButton).click();	
 	}
 
 	public static void deleteLastAdded() {
+		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(addNew));
 		Select regionValue = new Select(Browser.instance.findElement(regionDropdown));
 		regionValue.selectByVisibleText(regionName);
+		wait.until(ExpectedConditions.elementToBeClickable(addNew));
 		Browser.instance.findElement(deleteButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
 		Browser.instance.findElement(confirmYesButton).click();
-		System.out.println("Region deleted successfully: " +regionName);
-		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		System.out.println("Deleted the region: " +regionName);
 		wait.until(ExpectedConditions.elementToBeClickable(addNew));
 	}
 
@@ -52,7 +61,8 @@ public class RegionsPage {
 		Browser.instance.findElement(editButton).click();
 		Browser.instance.findElement(regionfield).sendKeys(regionName);
 		Browser.instance.findElement(saveButton).click();
-		System.out.println("Region edited successfully: " +regionName);
+		System.out.println("Edited the region: " +regionName);
+		//regionName = regionName.substring(0, regionName.length() - 4);
 		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(addNew));	
 	}
@@ -69,28 +79,100 @@ public class RegionsPage {
 
 	public static boolean isAdded() {
 		Select regionValue = new Select(Browser.instance.findElement(regionDropdown));
-		regionValue.selectByVisibleText(regionName);
-		return true;
+		Boolean found = false;
+		List<WebElement> allOptions = regionValue.getOptions();
+		loop:
+		for (WebElement we : allOptions) {
+	        for (int i = 0; i < allOptions.size(); i++) {
+	            if (we.getText().contains(regionName)) {
+	                found = true;
+	                System.out.println("The "+ regionName +" has been added");
+	                break loop;
+	            }
+	        }
+		}
+		return found;
 	}
 
 	public static boolean isEdited() {
-		// TODO Auto-generated method stub
-		return true;
+		Select regionValue = new Select(Browser.instance.findElement(regionDropdown));
+		Boolean found = false;
+		List<WebElement> allOptions = regionValue.getOptions();
+		loop:
+		for (WebElement we : allOptions) {
+	        for (int i = 0; i < allOptions.size(); i++) {
+	            if (we.getText().contains(regionName)) {
+	                found = true;
+	                System.out.println("The "+ regionName +" has been edited");
+	                break loop;
+	            }
+	        }
+		}
+		return found;
 	}
 
 	public static void editAndCancelRegion() {
-		// TODO Auto-generated method stub
-		
+		Select regionValue = new Select(Browser.instance.findElement(regionDropdown));
+		regionValue.selectByVisibleText(regionName);
+		Browser.instance.findElement(editButton).click();
+		Browser.instance.findElement(regionfield).sendKeys(regionName+"test");
+		Browser.instance.findElement(cancelButton).click();
+		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		Browser.instance.findElement(confirmYesButton).click();
+		System.out.println("Editing Cancelled for: " +regionName);
+		wait.until(ExpectedConditions.elementToBeClickable(addNew));	
 	}
+		
 
-	public static boolean checkProperErrorMessage() {
-		// use switch case for 2 scenarios - blank desc and duplicate - use same method
-		return false;
+	public static boolean checkProperErrorMessage() 
+	{
+		boolean returnValue = false;
+		String textMessage;
+		switch(errorMessageScenario) { 
+    case 1: 
+    	{textMessage = "Region already exist.";
+    	String actualMessage = Browser.instance.findElement(errorMessageDiv).getText();
+    	if (actualMessage.equals(textMessage)) {
+    		System.out.println("Inside if block");
+    		 returnValue = true;}
+    	
+    	break;}
+    case 2: 
+    	{textMessage = "Please enter region.";
+    	String actualMessage = Browser.instance.findElement(errorMessageDiv).getText();
+    	if (actualMessage.equals(textMessage)) {
+    		System.out.println("Inside if block");
+    		returnValue = true;}
+    		break;}
+		}
+		Browser.instance.findElement(confirmYesButton).click();
+		WebDriverWait wait = new WebDriverWait(Browser.instance,20);
+		wait.until(ExpectedConditions.elementToBeClickable(cancelButton));
+		Browser.instance.findElement(cancelButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		Browser.instance.findElement(confirmYesButton).click();
+		System.out.println(returnValue);
+		return returnValue;	
 	}
 
 	public static void addNewWithBlankDescription() {
-		// TODO Auto-generated method stub
+		Browser.instance.findElement(addNew).click();
+		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+		Browser.instance.findElement(saveButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		errorMessageScenario = 2;
 		
+	}
+
+	public static void addRegionAgain() {
+		Browser.instance.findElement(addNew).click();
+		Browser.instance.findElement(regionfield).sendKeys(regionName);
+		Browser.instance.findElement(saveButton).click();
+		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		errorMessageScenario = 1;
 	}
 	
 	}
