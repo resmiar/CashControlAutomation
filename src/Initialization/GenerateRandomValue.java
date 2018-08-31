@@ -25,7 +25,15 @@ public class GenerateRandomValue {
 
     public static int generateRandomInteger() {
     	int min = 0;
-    	int max = 20;
+    	int max = 99999;
+    		
+    		Random random = new Random();
+    		return random.nextInt((max - min) + 1) + min;   
+    }
+    
+    public static int generateRandomNumber() {
+    	int min = 0;
+    	int max = 9;
     		
     		Random random = new Random();
     		return random.nextInt((max - min) + 1) + min;   

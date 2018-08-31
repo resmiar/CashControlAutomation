@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import Initialization.Browser;
+import Initialization.DataProvider;
 
 public class UserLoginPage 
 {
@@ -19,15 +20,15 @@ public class UserLoginPage
 	
 	public static void goTo() 
 	{
-	Browser.instance.get("http://192.168.6.197/CCS/");
+	Browser.instance.get(DataProvider.getValueOf("Application URL"));
 	WebDriverWait wait = new WebDriverWait(Browser.instance,60);
 	wait.until(ExpectedConditions.elementToBeClickable(userName));
 	}
 
 	public static void loginWithValidCredentials() 
 	{
-	Browser.instance.findElement(userName).sendKeys("SFtestuser_sysadmin");	
-	Browser.instance.findElement(password).sendKeys("SFtestuser_sysadmin");
+	Browser.instance.findElement(userName).sendKeys(DataProvider.getValueOf("CCS UserName"));	
+	Browser.instance.findElement(password).sendKeys(DataProvider.getValueOf("Password"));
 	Browser.instance.findElement(loginButton).click();
 	}
 }

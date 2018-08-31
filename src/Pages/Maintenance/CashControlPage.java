@@ -1,4 +1,4 @@
-package Pages;
+package Pages.Maintenance;
 
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
@@ -33,7 +33,7 @@ public class CashControlPage {
 		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(dateValue));
 		ccGroup.selectByIndex(0);
-		Browser.instance.findElement(dateValue).sendKeys("01012018");
+		Browser.instance.findElement(dateValue).sendKeys("05012018");
 		Browser.instance.findElement(okButton).click();
 		Browser.instance.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
 		try {

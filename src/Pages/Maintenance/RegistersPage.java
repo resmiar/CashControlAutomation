@@ -1,7 +1,7 @@
-package Pages;
+package Pages.Maintenance;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -50,10 +50,11 @@ public class RegistersPage {
 		regionValue.selectByVisibleText(registerName);
 		registerName = registerName+"test";
 		Browser.instance.findElement(editButton).click();
+		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 		Browser.instance.findElement(registerfield).sendKeys(registerName);
 		Browser.instance.findElement(saveButton).click();
 		System.out.println("Region edited successfully: " +registerName);
-		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(addNew));	
 	}
 
@@ -62,7 +63,7 @@ public class RegistersPage {
 		WebElement element = Browser.instance.findElement(By.linkText("Location Maintenance"));
         Actions action = new Actions(Browser.instance);
         action.moveToElement(element).build().perform(); 
-        Browser.instance.findElement(By.linkText("POS / Registers")).click();
+        Browser.instance.findElement(By.linkText("POS/Registers")).click();
         WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(addNew));
 		Browser.instance.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
@@ -70,13 +71,36 @@ public class RegistersPage {
 
 	public static boolean isAdded() {
 		Select regionValue = new Select(Browser.instance.findElement(registerDropdown));
-		regionValue.selectByVisibleText(registerName);
-		return true;
+		Boolean found = false;
+		List<WebElement> allOptions = regionValue.getOptions();
+		loop:
+		for (WebElement we : allOptions) {
+	        for (int i = 0; i < allOptions.size(); i++) {
+	            if (we.getText().contains(registerName)) {
+	                found = true;
+	                System.out.println("The "+ registerName +" has been added");
+	                break loop;
+	            }
+	        }
+		}
+		return found;
 	}
 
 	public static boolean isEdited() {
-		// TODO Auto-generated method stub
-		return true;
+		Select regionValue = new Select(Browser.instance.findElement(registerDropdown));
+		Boolean found = false;
+		List<WebElement> allOptions = regionValue.getOptions();
+		loop:
+		for (WebElement we : allOptions) {
+	        for (int i = 0; i < allOptions.size(); i++) {
+	            if (we.getText().contains(registerName)) {
+	                found = true;
+	                System.out.println("The "+ registerName +" has been edited");
+	                break loop;
+	            }
+	        }
+		}
+		return found;
 	}
 
 	public static void editAndCancelRegister() {
@@ -100,16 +124,16 @@ public class RegistersPage {
 		String textMessage;
 		switch(errorMessageScenario) { 
     case 1: 
-    	textMessage = "Region already exist.";
-    	if (Browser.instance.findElement(errorMessageDiv).getText()==textMessage)
+    	textMessage = "Can Not Save. This Register already exists.";
+    	if (Browser.instance.findElement(errorMessageDiv).getText().equals(textMessage))
     		 returnValue = true;
     	else returnValue = false;
     	
     case 2: 
-    	textMessage = "Please enter region.";
+    	textMessage = "Both register and location are required.";
     	String actualMessage = Browser.instance.findElement(errorMessageDiv).getText();
     	System.out.println(actualMessage);
-    	if (actualMessage==textMessage) {
+    	if (actualMessage.equals(textMessage)) {
     		System.out.println(Browser.instance.findElement(errorMessageDiv).getText());
     		  returnValue = true;}
     		
@@ -120,7 +144,7 @@ public class RegistersPage {
 		wait.until(ExpectedConditions.elementToBeClickable(cancelButton));
 		Browser.instance.findElement(cancelButton).click();
 		Browser.instance.findElement(confirmYesButton).click();
-		return true;	
+		return returnValue;	
 	}
 
 	public static void addNewWithBlankDescription() {
@@ -133,6 +157,7 @@ public class RegistersPage {
 	public static void addRegisterAgain() {
 		Browser.instance.findElement(addNew).click();
 		Browser.instance.findElement(registerfield).sendKeys(registerName);
+		Browser.instance.findElement(registerDescription).sendKeys(registerDescriptionValue);
 		Browser.instance.findElement(saveButton).click();
 		errorMessageScenario = 1;
 	}

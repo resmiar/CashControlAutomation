@@ -1,4 +1,4 @@
-package Pages;
+package Pages.Maintenance;
 
 public class SeasonsPage {
 

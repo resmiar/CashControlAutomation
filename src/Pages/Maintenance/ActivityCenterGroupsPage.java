@@ -1,4 +1,4 @@
-package Pages;
+package Pages.Maintenance;
 
 import java.util.List;
 import org.openqa.selenium.By;
@@ -20,7 +20,8 @@ public class ActivityCenterGroupsPage {
 		static By deleteButton = By.xpath("(//button[@type='button'])[8]");
 		static By exitButton = By.xpath("(//button[@type='button'])[9]");
 		static By acGroupfield = By.name("txtAcGroupDesc");
-		static By acGroupDropdown = By.xpath("//div[2]/div/select");
+		//static By acGroupDropdown = By.xpath("//div[2]/div/select");
+		static By acGroupDropdown = By.xpath("//select[@data-ng-model='acGroups.acgId']");
 		static By ownedRadio = By.xpath("//input[@name='optionsRadios']");	
 		static By LeasedRadio = By.xpath("(//input[@name='optionsRadios'])[2]");
 		static By parkDropdown = By.name("ddlPark");
@@ -53,7 +54,29 @@ public class ActivityCenterGroupsPage {
 		}
 
 		public static void closeACGroup() {
-			Browser.instance.findElement(exitButton).click();	
+			WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+			if(Browser.instance.findElement(exitButton).isDisplayed())
+			{
+				if(Browser.instance.findElement(exitButton).isEnabled())
+				{
+					Browser.instance.findElement(exitButton).click();
+				}
+				else
+				{
+					Browser.instance.findElement(cancelButton).click();
+					wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+					Browser.instance.findElement(confirmYesButton).click();
+					wait.until(ExpectedConditions.elementToBeClickable(addNew));
+					Browser.instance.findElement(exitButton).click();
+				}
+			}
+			else
+			{ 
+				wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+				wait.until(ExpectedConditions.elementToBeClickable(addNew));
+				Browser.instance.findElement(exitButton).click();
+			}
+				
 		}
 
 		public static void deleteLastAddedACGroup() {
@@ -62,13 +85,14 @@ public class ActivityCenterGroupsPage {
 			
 			Select acGroupValue = new Select(Browser.instance.findElement(acGroupDropdown));
 			acGroupValue.selectByVisibleText(ACGroupName);
-			String currentValue = acGroupValue.getFirstSelectedOption().getText();
+			//String currentValue = acGroupValue.getFirstSelectedOption().getText();
 			
-			if(currentValue.equalsIgnoreCase(ACGroupName)) {
+			//if(currentValue.equalsIgnoreCase(ACGroupName)) {
 			Browser.instance.findElement(deleteButton).click();
 			Browser.instance.findElement(confirmYesButton).click();
 			System.out.println("AC Group has been deleted successfully: " +ACGroupName);
-			wait.until(ExpectedConditions.elementToBeClickable(addNew));}
+			wait.until(ExpectedConditions.elementToBeClickable(addNew));
+			//}
 		}
 
 		public static void editACGroup() {
