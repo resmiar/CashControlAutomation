@@ -30,6 +30,7 @@ public class CheckoutBagsPage {
 	static By confirmYesButton = By.xpath("(//button[@type='button'])[8]");
 	static String bagID;
 	static By clearFormCheckBox = By.xpath("//input[@data-ng-model='clearScreenControls']");
+	static By checkedOutBagsCount = By.xpath("//input[@data-ng-model='bagsCheckedOut']");
 	
 	public static void goTo() {
 		WebDriverWait wait = new WebDriverWait(Browser.instance,30);
@@ -43,6 +44,10 @@ public class CheckoutBagsPage {
 	    //WebDriverWait wait = new WebDriverWait(Browser.instance,30);
 		wait.until(ExpectedConditions.elementToBeClickable(BadgeDropdown));
 		Browser.instance.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
+		if(Browser.instance.findElement(clearFormCheckBox).isSelected())
+		{
+			Browser.instance.findElement(clearFormCheckBox).click();
+		}
 		
 	}
 
@@ -125,8 +130,13 @@ public class CheckoutBagsPage {
 	}
 
 	public static boolean isBagCheckedOut() {
-		// TODO Auto-generated method stub
-		return true;
+		boolean returnValue=false;
+		int numberOfBagsCheckedOut = Integer.parseInt(Browser.instance.findElement(checkedOutBagsCount).getAttribute("value"));
+		if(numberOfBagsCheckedOut>0)
+		{
+			returnValue=true;
+		}
+		return returnValue;
 	}
 
 	public static void selectSystemBag(int i) {
@@ -162,10 +172,11 @@ public class CheckoutBagsPage {
 		
 	}
 
-	public static void BuildBagForCheckout() {
+	public static String BuildBagForCheckout() {
 		BuildBagsPage.goTo();
 		bagID = BuildBagsPage.BuildBagForCheckout();
 		BuildBagsPage.close();
+		return bagID;
 	}
 
 }

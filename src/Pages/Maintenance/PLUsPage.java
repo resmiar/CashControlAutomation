@@ -2,6 +2,7 @@ package Pages.Maintenance;
 
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -24,18 +25,19 @@ public class PLUsPage {
 	static By notTaxableOption = By.id("rdbNotTaxAble");
 	static By includeTaxOption = By.id("rdbIncludeTax");
 	static By plusTaxOption = By.id("rdbPlusTax");
-	static By taxScheduleDropdown;
-	static By rebateDropdown;
+	static By taxScheduleDropdown=By.xpath("//select[@ng-model='selectedObjects.selectedTaxSchedule']");
+	static By rebateDropdown=By.xpath("//select[@ng-model='selectedObjects.selectedPLURebates']");
 	static By admissionField = By.id("txtAdmission");
-	static By revenueValue;
-	static By rebateValue;
-	static By taxValue;
-	static By priceValue;
-	static By removeTicketPartButton;
+	static By revenueValue=By.xpath("//input[@ng-model='selectedObjects.txtRevenue']");
+	static By rebateAmountValue=By.xpath("//input[@ng-model='selectedObjects.txtRebate']");
+	static By taxValue=By.xpath("//input[@ng-model='selectedObjects.txtTotalTax']");
+	static By priceValue=By.xpath("//input[@ng-model='selectedObjects.txtTotalPrice']");
+	static By removeTicketPartButton=By.xpath("//button[@ng-click='btnRemovePLUPartClick();']");
 	static String descriptionString;
 	static By loadingIcon = By.xpath("//div[@class='data-loading-PLU ng-hide']");
 	static By confirmYesButton = By.xpath("(//button[@type='button'])[18]");
-	
+	static By errorMessageDiv = By.xpath("//div[@class='full-width-form']");
+	static double rebateAmount, taxAmount,revenueAmount,totalPrice, revenueExpectedAmount;
 	
 
 	public static void goTo() {
@@ -65,13 +67,29 @@ public class PLUsPage {
 	}
 
 	public static boolean checkIfAdded() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean result = true;
+		Select regionValue = new Select(Browser.instance.findElement(pludropdown));
+		try {
+			regionValue.selectByVisibleText(descriptionString.toUpperCase());
+			}
+		catch(Exception e){
+			result = false;
+		}
+		
+		return result;
 	}
 
 	public static boolean checkIfEdited() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean result = true;
+		Select regionValue = new Select(Browser.instance.findElement(pludropdown));
+		try {
+			regionValue.selectByVisibleText(descriptionString.toUpperCase());
+			}
+		catch(Exception e){
+			result = false;
+		}
+		
+		return result;
 	}
 
 	public static void editPLU() {
@@ -116,31 +134,64 @@ public class PLUsPage {
 	}
 
 	public static void deleteTicketPart() {
-		// TODO Auto-generated method stub
+		Browser.instance.findElement(removeTicketPartButton).click();
 		
 	}
 
-	public static void closeTheMessage() {
-		// TODO Auto-generated method stub
-		
+	public static boolean checkTheMessage() {
+		boolean returnValue = false;
+		String textMessage; 
+    	textMessage = "There must be a PLU Part assigned to PLU.";
+    	String actualMessage = Browser.instance.findElement(errorMessageDiv).getText();
+    	if (actualMessage.equals(textMessage)) {
+    		System.out.println("Inside if block");
+    		 returnValue = true;
+    	}
+		Browser.instance.findElement(confirmYesButton).click();
+		WebDriverWait wait = new WebDriverWait(Browser.instance,20);
+		wait.until(ExpectedConditions.elementToBeClickable(cancelButton));
+		return returnValue;
 	}
 
 	public static void cancelEditing() {
 		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(cancelButton));
+		Browser.instance.findElement(cancelButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		Browser.instance.findElement(confirmYesButton).click();
 		wait.until(ExpectedConditions.elementToBeClickable(addButton));
-		Select regionValue = new Select(Browser.instance.findElement(pludropdown));
-		regionValue.selectByVisibleText(descriptionString.toUpperCase());
-		wait.until(ExpectedConditions.elementToBeClickable(addButton));
-		Browser.instance.findElement(editButton).click();
 	}
 
 	public static void addPLUAgain() {
-		// TODO Auto-generated method stub
+		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(loadingIcon));
+		wait.until(ExpectedConditions.elementToBeClickable(addButton));
+		Browser.instance.findElement(addButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+		Browser.instance.findElement(plufield).sendKeys(descriptionString);
+		Browser.instance.findElement(plufield).sendKeys(Keys.TAB);
+		System.out.println("Trying to add: " +descriptionString+" again");
 		
 	}
 
-	public static void verifyErrorMessage() {
-		// TODO Auto-generated method stub
+	public static boolean verifyErrorMessage() {
+		boolean returnValue = false;
+		String textMessage;
+		 
+    	textMessage = "There is already a PLU with this code.";
+    	String actualMessage = Browser.instance.findElement(errorMessageDiv).getText();
+    	if (actualMessage.equals(textMessage)) {
+    		System.out.println("Inside if block");
+    		 returnValue = true;
+    	}
+		Browser.instance.findElement(confirmYesButton).click();
+		WebDriverWait wait = new WebDriverWait(Browser.instance,20);
+		wait.until(ExpectedConditions.elementToBeClickable(cancelButton));
+		Browser.instance.findElement(cancelButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		Browser.instance.findElement(confirmYesButton).click();
+		System.out.println(returnValue);
+		return returnValue;	
 		
 	}
 
@@ -153,29 +204,94 @@ public class PLUsPage {
 	}
 
 	public static void setValuesForTaxAndRebate() {
-		// TODO Auto-generated method stub
+		Select taxScheduleValue = new Select(Browser.instance.findElement(taxScheduleDropdown));
+		taxScheduleValue.selectByIndex(1);
+		Select rebateValue = new Select(Browser.instance.findElement(rebateDropdown));
+		rebateValue.selectByIndex(2);
 		
+		Browser.instance.findElement(admissionField).clear();
+		Browser.instance.findElement(admissionField).sendKeys("10");
+		String temp = Browser.instance.findElement(rebateAmountValue).getAttribute("value");
+		//System.out.println(temp+"temp value");
+		rebateAmount = Double.parseDouble(temp);
+		//rebateAmount=0.00;
 	}
 
-	public static void checkCalculationForNoTax() {
-		// TODO Auto-generated method stub
+	public static boolean checkCalculationForNoTax() {
+		boolean returnValue= false;
+		Browser.instance.findElement(notTaxableOption).click();
+		totalPrice = Double.parseDouble(Browser.instance.findElement(priceValue).getAttribute("value")); 
+		revenueAmount=Double.parseDouble(Browser.instance.findElement(revenueValue).getAttribute("value"));
+		taxAmount=Double.parseDouble(Browser.instance.findElement(taxValue).getAttribute("value"));
+		revenueExpectedAmount = (totalPrice-rebateAmount);
+		
+		if(totalPrice==10.00 &&taxAmount== 0.00) {
+			if(revenueAmount==revenueExpectedAmount) {
+				returnValue = true;
+			}
+			
+		}
+		
+		return returnValue;
+		
 		
 	}
 	
 
-	public static void checkCalculationForTaxIncluded() {
-		// TODO Auto-generated method stub
+	public static boolean checkCalculationForTaxIncluded() {
+		Browser.instance.findElement(includeTaxOption).click();
+		boolean returnValue= false;
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		totalPrice = Double.parseDouble(Browser.instance.findElement(priceValue).getAttribute("value")); 
+		revenueAmount=Double.parseDouble(Browser.instance.findElement(revenueValue).getAttribute("value"));
+		taxAmount=Double.parseDouble(Browser.instance.findElement(taxValue).getAttribute("value"));
+		totalPrice = Math.round(totalPrice*100D)/100D;
+		revenueAmount=Math.round(revenueAmount*100D)/100D;
+		taxAmount=Math.round(taxAmount*100D)/100D;
+		revenueExpectedAmount = (totalPrice-(rebateAmount+taxAmount));
+		revenueExpectedAmount=Math.round(revenueExpectedAmount*100D)/100D;
+		System.out.println("expected revenue value is: "+revenueExpectedAmount);
+		if(totalPrice==10.00) {
+			if(revenueAmount==revenueExpectedAmount) {
+				returnValue = true;
+			}
+			
+		}
+		
+		return returnValue;
 		
 	}
 
-	public static void checkCalculationForPlusTax() {
-		// TODO Auto-generated method stub
+	public static boolean checkCalculationForPlusTax() {
+		Browser.instance.findElement(plusTaxOption).click();
+		boolean returnValue= false;
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		totalPrice = Double.parseDouble(Browser.instance.findElement(priceValue).getAttribute("value"));
+		revenueAmount=Double.parseDouble(Browser.instance.findElement(revenueValue).getAttribute("value"));
+		taxAmount=Double.parseDouble(Browser.instance.findElement(taxValue).getAttribute("value"));
+		revenueExpectedAmount = (10.00-rebateAmount);
+		
+		if(totalPrice==(10.00+taxAmount)) {
+			if(revenueAmount==revenueExpectedAmount) {
+				returnValue = true;
+			}
+			
+		}
+		
+		return returnValue;
 		
 	}
 
-	public static void cleanUpTaxAndRebate() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 }

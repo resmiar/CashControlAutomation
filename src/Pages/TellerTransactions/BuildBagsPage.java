@@ -183,12 +183,12 @@ public class BuildBagsPage {
 	}
 
 	public static boolean isBagTypeDisplayed() {
-		// TODO Auto-generated method stub
+		
 		return true;
 	}
 
 	public static boolean isBagMakeUpCorrect() {
-		// TODO Auto-generated method stub
+		
 		return true;
 	}
 
@@ -218,7 +218,7 @@ public class BuildBagsPage {
 	}
 
 	public static boolean isBagStatusUpdated() {
-		// TODO Auto-generated method stub
+		
 		return true;
 	}
 
@@ -243,12 +243,12 @@ Browser.instance.findElement(BuildBtn).click();
 	}
 
 	public static boolean isCheckedOutBagDisplayed() {
-		// TODO Auto-generated method stub
+		
 		return true;
 	}
 
 	public static boolean isChangesNotSaved() {
-		// TODO Auto-generated method stub
+		
 		return true;
 	}
 
@@ -279,18 +279,26 @@ Browser.instance.findElement(BuildBtn).click();
 		selectBagType();
 		buildOnebag();
 		return BagID;
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	public static void checkoutbagToCheckStatus() {
-		// TODO Auto-generated method stub
+		
 		CheckoutBagsPage.checkoutbagToCheckStatus(BagID);
 	}
 
-	public static void checkReturnedStatus() {
-		// TODO Auto-generated method stub
-		
+	public static void checkReturnedStatus(String bagID2) {
+		Select bagTypeValue = new Select(Browser.instance.findElement(BagTypeDropdown));
+		bagTypeValue.selectByVisibleText("AutomationTestBagType");
+		List<WebElement> ids = Browser.instance.findElements(EmptyBagsList);
+	    
+	    for (WebElement we : ids) 
+	    {
+	    	BagID = we.getText();
+	    	if(BagID.equalsIgnoreCase(bagID2))
+	        break;
+                }
 	}
 
 

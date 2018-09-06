@@ -344,7 +344,7 @@ public class DepositEntryPage {
 	}
 
 	public static void VerifyARandScripsCalculations() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -410,12 +410,12 @@ public class DepositEntryPage {
 			  
 		}
 	public static void EditAmountForExistingEntries() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	public static void VerifyTenderAmount() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

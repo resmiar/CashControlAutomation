@@ -185,13 +185,10 @@ public class EmployeesPage {
 	}
 
 	public static void addBadgeAgain() {
-		// TODO Auto-generated method stub
+		
 		errorMessageScenario = 3;
 	}
 
-	public static void deleteBadge() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	
 }

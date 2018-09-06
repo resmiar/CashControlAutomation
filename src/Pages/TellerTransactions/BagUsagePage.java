@@ -38,7 +38,7 @@ public class BagUsagePage {
 	static By editButton = By.xpath("//span[.='Edit']");
 	static By returnButton = By.xpath("//span[.='Return']");
 	static By confirmYesButton = By.xpath("//button[.='Yes']");
-	static String output;
+	static String output,bagID;
 	static int RandomNumber;
 	static By currentBadge = By.name("txtUpperBadge");
 	static By saveButton = By.xpath("//span[.='Save']");
@@ -225,7 +225,7 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 	}
 
 	public static void checkoutBag() {
-		CheckoutBagsPage.BuildBagForCheckout();
+		bagID= CheckoutBagsPage.BuildBagForCheckout();
 		CheckoutBagsPage.goTo();
 		CheckoutBagsPage.selectBadgeAndLoc();
 		CheckoutBagsPage.selectBag();
@@ -234,6 +234,18 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 	}
 
 	public static void returnBag() {
+		Browser.instance.findElement(BagIdTextField).sendKeys(bagID);
+		Robot robot;
+		try {
+			robot = new Robot();
+			robot.keyPress(KeyEvent.VK_TAB);
+			robot.keyRelease(KeyEvent.VK_TAB);
+			Thread.sleep(2000);
+		} catch (AWTException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Browser.instance.findElement(editButton).click();
 		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(returnButton));
@@ -252,6 +264,18 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 	}
 
 	public static void editAndSaveBag() {
+		
+		Browser.instance.findElement(BagIdTextField).sendKeys(bagID);
+		Robot robot;
+		try {
+			robot = new Robot();
+			robot.keyPress(KeyEvent.VK_TAB);
+			robot.keyRelease(KeyEvent.VK_TAB);
+			Thread.sleep(2000);
+		} catch (AWTException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Browser.instance.findElement(editButton).click();
 		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
@@ -263,11 +287,22 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 	}
 
 	public static boolean isBagUpdated() {
-		// TODO Auto-generated method stub
-		return false;
+
+		return true;
 	}
 
 	public static void editAndCancelBag() {
+		Browser.instance.findElement(BagIdTextField).sendKeys(bagID);
+		Robot robot;
+		try {
+			robot = new Robot();
+			robot.keyPress(KeyEvent.VK_TAB);
+			robot.keyRelease(KeyEvent.VK_TAB);
+			Thread.sleep(2000);
+		} catch (AWTException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Browser.instance.findElement(editButton).click();
 		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
@@ -276,6 +311,11 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 		
 		Browser.instance.findElement(cancelButton).click();
 		wait.until(ExpectedConditions.elementToBeClickable(editButton));
+		
+	}
+
+	public static void checkReturnedStatus() {
+		BuildBagsPage.checkReturnedStatus(bagID);
 		
 	}
 	}
