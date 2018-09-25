@@ -19,10 +19,16 @@ public class GLAccountStringBuilderPage {
 	static int index ;
 	
 	public static void createString() {
-		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		WebDriverWait wait = new WebDriverWait(Browser.instance,30);
 		wait.until(ExpectedConditions.elementToBeClickable(departmentCodeField));
-		index = GenerateRandomValue.generateRandomInteger();
+		index = GenerateRandomValue.generateRandomNumber();
 		Select departmentCode = new Select(Browser.instance.findElement(departmentCodeField));
+		wait.until(ExpectedConditions.elementToBeClickable(departmentCodeField));
 		departmentCode.selectByIndex(index);
 		Select naturalAccountCode = new Select(Browser.instance.findElement(naturalAccountCodeField));
 		naturalAccountCode.selectByIndex(index);
@@ -34,9 +40,14 @@ public class GLAccountStringBuilderPage {
 	}
 	
 	public static String createStringAndReturnString() {
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(departmentCodeField));
-		index = GenerateRandomValue.generateRandomInteger();
+		index = GenerateRandomValue.generateRandomNumber();
 		Select departmentCode = new Select(Browser.instance.findElement(departmentCodeField));
 		departmentCode.selectByIndex(index);
 		Select naturalAccountCode = new Select(Browser.instance.findElement(naturalAccountCodeField));

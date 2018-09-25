@@ -12,11 +12,7 @@ import Initialization.Browser;
 
 public class OptionsPage {
 
-//get some values from an excel file
-//update from screen
-//Check in db is it updated comparing to excel file
-//Change it back to original values
-//check in DB j
+
 
 	static By maintenanceMenu = By.xpath("//a[contains(text(),'Maintenance')]");
     static By editButton=By.xpath("//span[.='Edit']");

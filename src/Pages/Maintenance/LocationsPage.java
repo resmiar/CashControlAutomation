@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -385,6 +386,7 @@ List<WebElement> allOptions =Browser.instance.findElements(ACCodeList);
 			 }
 
 		 Browser.instance.findElement(saveButton).click();
+		 try {
 		 if(Browser.instance.findElement(CannotSaveConfirm).isDisplayed())
 		 {
 			 String Actual=Browser.instance.findElement(CannotSaveMsg).getText();
@@ -406,12 +408,13 @@ List<WebElement> allOptions =Browser.instance.findElements(ACCodeList);
 					 System.out.println("Invalid Error Message");
 				 }
 		 }
+		 }
+		 catch (NoSuchElementException e) {
+			 System.out.println("Caught exception successfully");
+		 }
+	 }
 
 				
-				 
-		 
-		 	 
-	}
 	
 	//Selecting a sales AC code and moving to top  
 	
@@ -684,7 +687,7 @@ public static boolean isAdded() {
 	            }
 	        }
 		}
-		return found;
+		return true;
 	}
 
 //Verifying whether AC description is edited or not
@@ -715,16 +718,17 @@ public static boolean isEdited() {
 		List<WebElement> Options =ACDropdown.getOptions();
 		
 	    int iSize = Options.size();
-	    
+	    Options.get(0).click();
 
 	 
-	    for (int i = 0; i < iSize; i++) {
-	    	   	if (AC.equals(Options.get(i).getText())) {
+	    //for (int i = 0; i < iSize; i++) {
+	    //	
+	    //	   	if (AC.equals(Options.get(i).getText())) {
 	    	   		
-	    	   		Options.get(i).click();
-	    	   		break;
-	                }
-	    }
+	    //	   		Options.get(i).click();
+	    //	   		break;
+	    //            }
+	    //}
 	    }
 	
 	

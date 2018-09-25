@@ -28,7 +28,7 @@ public class UserLoginPage
 	public static void loginWithValidCredentials() 
 	{
 	Browser.instance.findElement(userName).sendKeys(DataProvider.getValueOf("CCS UserName"));	
-	Browser.instance.findElement(password).sendKeys(DataProvider.getValueOf("Password"));
+	Browser.instance.findElement(password).sendKeys(DataProvider.getValueOf("CCS Password"));
 	Browser.instance.findElement(loginButton).click();
 	}
 }

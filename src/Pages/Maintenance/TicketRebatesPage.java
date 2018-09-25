@@ -176,10 +176,16 @@ public class TicketRebatesPage {
 	}
 
 	public static void addWithoutGLAccount() {
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		Browser.instance.findElement(addNew).click();
+		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 		Browser.instance.findElement(rebatefield).sendKeys(rebateName);
 		Browser.instance.findElement(saveButton).click();
-		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
 		errorMessageScenario = 1;
 	}

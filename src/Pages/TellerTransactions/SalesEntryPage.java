@@ -26,6 +26,7 @@ public class SalesEntryPage {
 	static By saveButton=By.xpath("//span[.='Save']");
 	static By cancelButton=By.xpath("//span[.='Cancel']");
 	static By CancelConfirm=By.xpath("//button[.='Yes']");
+	static By bagEntryField =By.id("bagAlias");
 	static By ItemSelectionButton=By.xpath("//button[@name='btnBagItems']");
 	static By BagIdList=By.xpath("//div[@class='ui-grid-cell-contents ng-binding ng-scope']/../../..//div/div[1][contains(@ng-dblclick,'grid.appScope.onDblClick(row)')]");
 	static By BagTypeList=By.xpath("//div[@class='ui-grid-cell-contents ng-binding ng-scope']/../../..//div[2]");
@@ -104,7 +105,7 @@ public class SalesEntryPage {
 	static By AutoSalesOnlyMsg=By.xpath("//div[@class='full-width-form']");
 	static By AutoSalesOnlyConfirmButton=By.xpath("//button[.='OK']");
 	static By ApplyAllSalesToBagCheckbox=By.xpath("//input[@data-ng-model='applyAllSalesToBag']");
-	
+	static By loadingIcon = By.xpath("//div[@class='data-loading-PLU ng-hide']");
 	
 	
 	
@@ -127,8 +128,10 @@ public class SalesEntryPage {
 	    Actions action = new Actions(Browser.instance);
 	    action.moveToElement(element).build().perform(); 
 	    Browser.instance.findElement(By.linkText("Sales Entry")).click();
+	    Browser.instance.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
 	    WebDriverWait wait= new WebDriverWait(Browser.instance,10);
 	    wait.until(ExpectedConditions.elementToBeClickable(exitButton));
+	    wait.until(ExpectedConditions.invisibilityOfElementLocated(loadingIcon));
 		
 	
 		}
@@ -279,9 +282,9 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 		
 			 Browser.instance.findElement(ActCenterDetailsEnding).sendKeys("400.00");
 			 Browser.instance.findElement(ActCenterDetailsBeginning).sendKeys("250.00");
-			Browser.instance.findElement(ActCenterDetailsOverride).sendKeys("45.00");
-			Browser.instance.findElement(ActCenterDetailsQty).sendKeys("5");
-			Browser.instance.findElement(ActCenterDetailsGross).sendKeys("200.00");
+			//Browser.instance.findElement(ActCenterDetailsOverride).sendKeys("45.00");
+			//Browser.instance.findElement(ActCenterDetailsQty).sendKeys("5");
+			//Browser.instance.findElement(ActCenterDetailsGross).sendKeys("200.00");
 			Tab();
 			Thread.sleep(1000);
 			double ActualGrossAmtEndReading = Double.parseDouble(Browser.instance.findElement(GrossAmtEndReading).getAttribute("value"));
@@ -403,31 +406,31 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 	public static void AddNewtoExistingEntry() throws Exception
 	{
 		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
-		Thread.sleep(1000);
-		try {
-			Browser.instance.findElement(ItemSelectionButton).click();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Click Intercepted Exception handled successfully");
-			Browser.instance.findElement(ItemSelectionButton).click();
-		}
+		//Thread.sleep(1000);
+		//try {
+			//Browser.instance.findElement(ItemSelectionButton).click();
+		//}
+		//catch(Exception e)
+		//{
+		//	System.out.println("Click Intercepted Exception handled successfully");
+		//	Browser.instance.findElement(ItemSelectionButton).click();
+		//}
 	
-		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(BagIdList));
-		selectItem("1026",BagIdList);
+		//wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(BagIdList));
+		//selectItem("1026",BagIdList);
 	
-		Browser.instance.findElement(selectButton).click();
-		Thread.sleep(2000);
+		//Browser.instance.findElement(selectButton).click();
+		//Thread.sleep(2000);
 
-		 Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
-		 LocCode.selectByVisibleText("4790");
-		 try {
-			 Browser.instance.findElement(RetrieveButton).click();
-		 }
-		catch(Exception e){
-			Browser.instance.findElement(RetrieveButton).click();
-		}
-	
+		 //Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
+		/// LocCode.selectByVisibleText("4790");
+		// try {
+		//	 Browser.instance.findElement(RetrieveButton).click();
+		// }
+		//catch(Exception e){
+		//	Browser.instance.findElement(RetrieveButton).click();
+		//}
+	selectBag();
 		
 	wait.until(ExpectedConditions.elementToBeClickable(newExistingSalesButton));
 	Browser.instance.findElement(newExistingSalesButton).click();
@@ -438,42 +441,43 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 	public static void EditExistingEntry() throws Exception
 	{
 		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
-		Thread.sleep(1000);
+		//Thread.sleep(1000);
 		
-		try {
-			Browser.instance.findElement(ItemSelectionButton).click();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Click Intercepted Exception handled successfully");
-			Browser.instance.findElement(ItemSelectionButton).click();
-		}
+		//try {
+		//	Browser.instance.findElement(ItemSelectionButton).click();
+		//}
+		//catch(Exception e)
+		//{
+		//	System.out.println("Click Intercepted Exception handled successfully");
+		//	Browser.instance.findElement(ItemSelectionButton).click();
+		//}
 	
-		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(BagIdList));
-		selectItem("1026",BagIdList);
+		//wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(BagIdList));
+		//selectItem("1026",BagIdList);
 	
-		Browser.instance.findElement(selectButton).click();
-		Thread.sleep(2000);
-		try {
-			Browser.instance.findElement(DiffWorkingDateConfirm).click();
-			 Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
+		//Browser.instance.findElement(selectButton).click();
+		//Thread.sleep(2000);
+		//try {
+		//	Browser.instance.findElement(DiffWorkingDateConfirm).click();
+		//	 Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
 			 
-			 LocCode.selectByVisibleText("3290");
-		}
-		 catch(Exception e)
-		{
- Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
+		//	 LocCode.selectByVisibleText("3290");
+		//}
+		// catch(Exception e)
+		//{
+		//Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
 		 
-		 LocCode.selectByVisibleText("3290");
-		}
+		// LocCode.selectByVisibleText("3290");
+		//}
 
 
-		 try {
-			 Browser.instance.findElement(RetrieveButton).click();
-		 }
-		catch(Exception d){
-			Browser.instance.findElement(RetrieveButton).click();
-		}
+		 //try {
+			 //Browser.instance.findElement(RetrieveButton).click();
+		 //}
+		//catch(Exception d){
+		//	Browser.instance.findElement(RetrieveButton).click();
+		//}
+		selectBag();
 	wait.until(ExpectedConditions.elementToBeClickable(editExistingSalesButton));
 	Browser.instance.findElement(existingLastSalesEntriesList).click();
 	Browser.instance.findElement(editExistingSalesButton).click();
@@ -951,6 +955,23 @@ public static void Tab() throws Exception
 	 Robot robot = new Robot();
 		robot.keyPress(KeyEvent.VK_TAB);
 	robot.keyRelease(KeyEvent.VK_TAB);
+}
+
+public static void selectBag() {
+	WebDriverWait wait= new WebDriverWait(Browser.instance,60);
+	try {
+		Thread.sleep(3000);
+	} catch (InterruptedException e) {
+	
+		e.printStackTrace();
+	}
+	Browser.instance.findElement(bagEntryField).sendKeys("2002");
+	Browser.instance.findElement(bagEntryField).sendKeys(Keys.TAB);
+	wait.until(ExpectedConditions.elementToBeClickable(RetrieveButton)); 
+	Browser.instance.findElement(LocCodeDropdown).click();
+	Browser.instance.findElement(RetrieveButton).click();
+	wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+	
 }
 
 

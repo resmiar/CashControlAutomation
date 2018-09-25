@@ -1,16 +1,8 @@
 package Pages.Maintenance;
 
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -23,6 +15,7 @@ public class GLAccountsPage {
 	static By editButton=By.xpath("//span[.='Edit']");
 	static By GLAcCentersTab=By.xpath("//a[.='GL Activity Centers']");
 	static By GLAcCentersList=By.xpath("//div[@id='GlActivityCenters']//div[contains(@class, 'ui-grid-cell-contents ng-binding ng-scope')]/../../..//div[3]");
+	static By GLDeptList=By.xpath("//div[@id='GlDepartments']//div[contains(@class, 'ui-grid-cell-contents ng-binding ng-scope')]/../../..//div[3]");
 	static By GLAcCentersLast=By.xpath("(//div[@id='GlActivityCenters']//div[contains(@class, 'ui-grid-cell-contents ng-binding ng-scope')]/../../..//div[3])[last()]");
 	static By GLAcCentersActivateButton=By.xpath("(//button[.='Activate'])[3]");
 	static By GLAcCentersFirst=By.xpath("(//div[@id='GlActivityCenters']//div[contains(@class, 'ui-grid-cell-contents ng-binding ng-scope')]/../../..//div[3])[first()]");
@@ -34,8 +27,12 @@ public class GLAccountsPage {
 	static By exitButton=By.xpath("//span[.='Exit']");
 	static By view=By.xpath("(//div[@role='rowgroup'])[6]");
 	static By Test=By.xpath("(//div[.='Employee Sales'])[2]");
-	
-	
+	static By gLHotSyncButton = By.xpath("//button[@ng-click = 'btnGlHotSyncClick();']");
+	static By closeButton = By.xpath("//button[@ng-click='closeMe();']");
+	static By cancelButton = By.xpath("//button[@ng-click='btnCancelClick();']");
+	static By confirmYesButton =By.xpath("//button[@data-bb-handler='Success']");
+	static By viewButton = By.xpath("//button[@ng-click='btnViewBtmClick();']");
+	static By viewACButton = By.xpath("//button[@ng-click='btnViewActivityCenterClick();']");
 	
 	
 	
@@ -126,6 +123,69 @@ public class GLAccountsPage {
 	{
 
 		Browser.instance.findElement(exitButton).click();
+		Browser.instance.manage().timeouts().implicitlyWait(20,TimeUnit.SECONDS);
+		WebDriverWait wait=new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(maintenanceMenu));
+	}
+
+	public static void editAndSaveCompany() {
+		Browser.instance.findElement(GLAcCentersTab).click();
+		Browser.instance.manage().timeouts().implicitlyWait(20,TimeUnit.SECONDS);
+		
+		Browser.instance.findElement(editButton).click();
+	
+		WebDriverWait wait=new WebDriverWait(Browser.instance,10);
+	    wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(GLAcCentersList));
+	    wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+		Browser.instance.findElement(saveButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(exitButton));
+	
+	}
+
+	public static void openImportForm() {
+		Browser.instance.findElement(gLHotSyncButton).click();
+		WebDriverWait wait=new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(closeButton));
+		System.out.println("Opened the import window");
+		Browser.instance.findElement(closeButton).click();
+			
+	}
+
+	public static void editAndCancelCompany() {
+		Browser.instance.findElement(GLAcCentersTab).click();
+		Browser.instance.manage().timeouts().implicitlyWait(20,TimeUnit.SECONDS);
+		
+		Browser.instance.findElement(editButton).click();
+	
+		WebDriverWait wait=new WebDriverWait(Browser.instance,10);
+	    wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(GLAcCentersList));
+	    wait.until(ExpectedConditions.elementToBeClickable(cancelButton));
+		Browser.instance.findElement(cancelButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		Browser.instance.findElement(confirmYesButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(exitButton));
+		
+	}
+
+	public static void viewDepartment() {
+		WebDriverWait wait=new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(GLDeptList));
+	    wait.until(ExpectedConditions.elementToBeClickable(viewButton));
+		Browser.instance.findElement(viewButton).click();	
+		Browser.instance.manage().timeouts().implicitlyWait(20,TimeUnit.SECONDS);
+	    wait.until(ExpectedConditions.elementToBeClickable(closeButton));
+		Browser.instance.findElement(closeButton).click();
+	}
+
+	public static void viewActivityCenter() {
+		Browser.instance.findElement(GLAcCentersTab).click();
+		WebDriverWait wait=new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(GLAcCentersList));
+		Browser.instance.manage().timeouts().implicitlyWait(20,TimeUnit.SECONDS);
+	    wait.until(ExpectedConditions.elementToBeClickable(viewACButton));
+		Browser.instance.findElement(viewACButton).click();	
+	    wait.until(ExpectedConditions.elementToBeClickable(closeButton));
+		Browser.instance.findElement(closeButton).click();
 	}
 
 

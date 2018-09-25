@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -34,7 +35,8 @@ public class TaxSchedulesPage   {
 		Browser.instance.findElement(addNew).click();
 		scheduleName = GenerateRandomValue.generateRandomStringtest();
 		Browser.instance.findElement(taxSchedulefield).sendKeys(scheduleName);
-		selectTaxCode("Sales Tax");
+		//selectTaxCode("Sales Tax");
+		selectTaxCode();
 		Browser.instance.findElement(arrowButton).click();
 		Browser.instance.findElement(saveButton).click();
 		System.out.println("Added the region: " +scheduleName);
@@ -204,7 +206,16 @@ public class TaxSchedulesPage   {
     
 	}
 	
+	public static void selectTaxCode() {
+		List<WebElement> rows = Browser.instance.findElements(availableTaxNameColumn);
+	    int iSize = rows.size();
+	    if (iSize!=0) {
+	       rows.get(0).click();
+	    }
+	    else System.out.println("Grid cell element not found");
+
 	}
+}
 
 
 

@@ -1,8 +1,11 @@
 package Pages.TellerTransactions;
 
+import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -16,7 +19,7 @@ public class CheckoutBagsPage {
 	static By TransactionsMenu = By.xpath("//a[contains(text(),'Transactions')]");
 	static By BadgeDropdown=By.xpath("//select[@name='ddlBadge']");
 	static By saveButton=By.name("btnSave");
-	static By exitButton=By.xpath("//span[.='Exit']");
+	static By exitButton=By.xpath("//button[@data-ng-click='btnExitClick()']");
 	static By locationDropdown = By.xpath("//select[@data-ng-model='lstSelectedLocCodes.locationId']");
 	static By locationAllRadio = By.id("rdoAll");
 	static By locationRecentRadio = By.id("rdoRecent");
@@ -31,6 +34,7 @@ public class CheckoutBagsPage {
 	static String bagID;
 	static By clearFormCheckBox = By.xpath("//input[@data-ng-model='clearScreenControls']");
 	static By checkedOutBagsCount = By.xpath("//input[@data-ng-model='bagsCheckedOut']");
+	static int numberOfBagsCheckedOut ;
 	
 	public static void goTo() {
 		WebDriverWait wait = new WebDriverWait(Browser.instance,30);
@@ -71,7 +75,7 @@ public class CheckoutBagsPage {
 		//	Browser.instance.findElement(confirmYesButton).click();
 		//}
 		Browser.instance.findElement(exitButton).click();
-		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		WebDriverWait wait = new WebDriverWait(Browser.instance,30);
 		wait.until(ExpectedConditions.elementToBeClickable(TransactionsMenu));
 	}
 
@@ -82,8 +86,7 @@ public class CheckoutBagsPage {
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				e.printStackTrace();
 		}
 		Select locationValue= new Select(Browser.instance.findElement(locationDropdown));
 		locationValue.selectByIndex(1);
@@ -91,7 +94,7 @@ public class CheckoutBagsPage {
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		
 			e.printStackTrace();
 		}
 	}
@@ -112,26 +115,47 @@ public class CheckoutBagsPage {
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		//Browser.instance.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
-		Browser.instance.findElement(saveButton).click();
-		//Browser.instance.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
 		
-		//if (Browser.instance.findElement(confirmYesButton).isDisplayed())
-		//{
-		//	Browser.instance.findElement(confirmYesButton).click();
-		//}
-		WebDriverWait wait = new WebDriverWait(Browser.instance,40);
-		wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(saveButton)));
-		//wait.until(ExpectedConditions.attributeToBe(saveButton, "disabled", "disabled"));
+		Browser.instance.findElement(saveButton).click();
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		String parent=Browser.instance.getWindowHandle();
+		Set<String>s1=Browser.instance.getWindowHandles();
+		Iterator<String> I1= s1.iterator();
+		if(s1.size()!=0) {
+		while(I1.hasNext())
+		{
+		  String child_window=I1.next();
+		  if(!parent.equals(child_window))
+		  {
+			  Browser.instance.switchTo().window(child_window);
+		    System.out.println(Browser.instance.switchTo().window(child_window).getTitle());
+		    Browser.instance.close();
+		  }
+		}
+		Browser.instance.switchTo().window(parent);
+		System.out.println(Browser.instance.switchTo().window(parent).getTitle());
+		
+		
+		}
+		try {
+			numberOfBagsCheckedOut = Integer.parseInt(Browser.instance.findElement(checkedOutBagsCount).getAttribute("value"));
+			Thread.sleep(6000);
+		} catch (NoAlertPresentException | InterruptedException e) {
+		
+			e.printStackTrace();
+		}
+		
 	}
 
 	public static boolean isBagCheckedOut() {
 		boolean returnValue=false;
-		int numberOfBagsCheckedOut = Integer.parseInt(Browser.instance.findElement(checkedOutBagsCount).getAttribute("value"));
+		numberOfBagsCheckedOut = Integer.parseInt(Browser.instance.findElement(checkedOutBagsCount).getAttribute("value"));
 		if(numberOfBagsCheckedOut>0)
 		{
 			returnValue=true;
@@ -157,7 +181,6 @@ public class CheckoutBagsPage {
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Select locationValue= new Select(Browser.instance.findElement(locationDropdown));
@@ -166,7 +189,6 @@ public class CheckoutBagsPage {
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

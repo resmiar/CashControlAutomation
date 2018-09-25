@@ -51,7 +51,7 @@ public class CheckInBagsPage {
 		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
 	   
 		Browser.instance.findElement(BagCheckInButton).click();
-		SelectItem("3002",BagIdItemSelectionList);
+		SelectItem("2002",BagIdItemSelectionList);
 		Thread.sleep(1000);
 		Browser.instance.findElement(SelectButton).click();
 		 wait.until(ExpectedConditions.elementToBeClickable(exitButton));

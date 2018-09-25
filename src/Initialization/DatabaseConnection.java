@@ -6,18 +6,18 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseConnection {
-	public static Connection connection;
-	public static Statement statement;
-	public static ResultSet rs;
+public static Connection connection;
+public static Statement statement;
+public static ResultSet rs;
 static String data1=null;
 static int data2=0;
 	 
 	    public static void dataBaseSetUp() {
-	            //String databaseURL = "jdbc:mysql://192.168.6.204\\MSSQLSERVER2016:3306/MCCC";
-	    	//String databaseURL=  "jdbc:sqlserver://192.168.6.204\\MSSQLSERVER2016;database=MCCC;";
+	           
 	    	String databaseURL=  "jdbc:sqlserver://192.168.6.204\\MSSQLSERVER2016;databaseName=SFOT_MCCC;";
 	            String user = "MacUser";
 	            String password = "MacUser";
+	            
 	            connection = null;
 	            try {
 	            	Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -124,10 +124,24 @@ public static int updateDatatoDb(String inputQuery) {
 			if (depositID!=null) {
 				updateDatatoDb("delete from depositDetails where DepositID = '"+depositID+"'" );
 				updateDatatoDb("delete from deposits where DepositID = '"+depositID+"'");
+				System.out.println("Deposit entries deleted");
 			}
-			
+		}
+			public static void deleteAddedBag() {
+				
+				try {
+					dataBaseSetUp();
+					statement = connection.createStatement();
+					rs = statement.executeQuery("delete from bags where BagAlias='1009998'");
+					
+					}
+				catch (SQLException ex) {
+			           ex.printStackTrace();}
+				System.out.println("Deleted 1009998 ba successsfully");						
+				}
+
 			
 			
 		}
 
-}
+

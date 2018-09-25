@@ -16,6 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -130,18 +131,28 @@ public class CreateJournalFilePage {
 public static void generateJournalFile() throws Exception
 {
 	Thread.sleep(2000);
-	String parentwinHandle = Browser.instance.getWindowHandle();
+	String parent=Browser.instance.getWindowHandle();
 	Browser.instance.findElement(GenerateButton).click();
 
 	Thread.sleep(1000);
 
-	for(String winHandle : Browser.instance.getWindowHandles())
-	{
-		Browser.instance.switchTo().window(winHandle);
-	}
-	Browser.instance.close();
-	Browser.instance.switchTo().window(parentwinHandle);
 	
+	Set<String>s1=Browser.instance.getWindowHandles();
+	Iterator<String> I1= s1.iterator();
+	if(s1.size()!=0) {
+	while(I1.hasNext())
+	{
+	  String child_window=I1.next();
+	  if(!parent.equals(child_window))
+	  {
+		  Browser.instance.switchTo().window(child_window);
+	    System.out.println(Browser.instance.switchTo().window(child_window).getTitle());
+	    Browser.instance.close();
+	  }
+	}
+	}
+	Browser.instance.switchTo().window(parent);
+	System.out.println(Browser.instance.switchTo().window(parent).getTitle());
 	
 
 

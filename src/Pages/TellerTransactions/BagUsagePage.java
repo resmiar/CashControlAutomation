@@ -18,7 +18,7 @@ import Initialization.Browser;
 public class BagUsagePage {
 
 	static By TransactionsMenu = By.xpath("//a[contains(text(),'Transactions')]");
-	static By exitButton=By.xpath("//span[.='Exit']");
+	static By exitButton=By.xpath("(//button[@type='button'])[9]");//("//button[@data-ng-click='btnExitClick()']");
 	static By BagSelectButton=By.xpath("//button[@class='btn-primary theme-commen-button']");	
 	static By BagIdItemSelectionList=By.xpath("//div[@class='ui-grid-cell-contents ng-binding ng-scope']/../../..//div[1][contains(@class,'coluiGrid')]");
 	static By SelectButton=By.xpath("//button[.='Select']");
@@ -35,14 +35,16 @@ public class BagUsagePage {
 	static By TotalTender=By.id("txtTenderTotal");
 	static By TenderEntrySaveButton=By.xpath("(//span[.='Save'])[1]");
 	static By TenderEntryExitButton=By.xpath("(//span[.='Exit'])[1]");
-	static By editButton = By.xpath("//span[.='Edit']");
-	static By returnButton = By.xpath("//span[.='Return']");
-	static By confirmYesButton = By.xpath("//button[.='Yes']");
+	static By editButton = By.xpath("(//button[@type='button'])[4]");//("//button[@data-ng-click='btnEditClick()']");
+	static By returnButton = By.xpath("(//button[@type='button'])[7]");//("//button[@data-ng-click='btnReturnClick()']");
+	static By confirmYesButton = By.xpath("//button[@data-bb-handler='Success']");
 	static String output,bagID;
 	static int RandomNumber;
 	static By currentBadge = By.name("txtUpperBadge");
-	static By saveButton = By.xpath("//span[.='Save']");
+	static By saveButton = By.xpath("(//button[@type='button'])[5]");//("//button[@data-ng-click='btnSaveClick()']");
 	static By cancelButton = By.xpath("//span[.='Cancel']");
+	static By tenderEntrySection = By.xpath("//div[@ui-grid='gridTenderActivityOptions']");
+	static By tenderEntryinGrid = By.xpath(".//div[@class='ui-grid-cell-contents ng-binding ng-scope']");
 	
 	//Go to Bag Usage Page
 	public static void goTo() {
@@ -61,6 +63,13 @@ public class BagUsagePage {
 	    action.moveToElement(element).build().perform(); 
 	    Browser.instance.findElement(By.linkText("Bag Usage")).click();
 	    WebDriverWait wait= new WebDriverWait(Browser.instance,10);
+	    
+	    try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			System.out.println("Caught an exception in opening bag usage form");
+			e.printStackTrace();
+		}
 	    wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 		
 	}
@@ -69,7 +78,7 @@ public class BagUsagePage {
 	
 	public static void VerifyCheckInDates() throws Exception
 	{
-		Browser.instance.findElement(BagIdTextField).sendKeys("3002");
+		Browser.instance.findElement(BagIdTextField).sendKeys("2002");
 		 Robot robot = new Robot();
 			robot.keyPress(KeyEvent.VK_TAB);
 		robot.keyRelease(KeyEvent.VK_TAB);
@@ -98,22 +107,20 @@ public class BagUsagePage {
 		 Robot robot = new Robot();
 			robot.keyPress(KeyEvent.VK_PAGE_DOWN);
 		robot.keyRelease(KeyEvent.VK_PAGE_DOWN);
-		
-		wait.until(ExpectedConditions.visibilityOfElementLocated(FirstTenderEntry));
-		 List<WebElement> TenderList = Browser.instance.findElements(TenderEntriesList);
+		  
+		wait.until(ExpectedConditions.visibilityOfElementLocated(tenderEntrySection));
+		WebElement tenderEntryTable = Browser.instance.findElement(tenderEntrySection);
+		 List<WebElement> TenderList = tenderEntryTable.findElements(tenderEntryinGrid);
 		 int ListSize = TenderList.size();
 		System.out.println("No of Tender Entries to this Location is "+ListSize);
+		TenderList.get(ListSize-1).click();						
 		
-		for(int i=0;i<ListSize;i++)
-		{
-			TenderList.get(ListSize-1).click();
-			break;
-			
-		}
 		//Actions action = new Actions(Browser.instance).doubleClick(Browser.instance.findElement(LastTenderEntry));
 		Actions action = new Actions(Browser.instance);
-		action.doubleClick();
+		action.doubleClick(TenderList.get(ListSize-1));
+		System.out.println("Going to perform the double click action");
 		action.build().perform();
+		Thread.sleep(3000);
 		
 		
 wait.until(ExpectedConditions.visibilityOfElementLocated(BufferImg));
@@ -121,6 +128,7 @@ wait.until(ExpectedConditions.elementToBeClickable(TenderEntryPage.BillsCoinsTab
 Clear(TenderEntryPage.BillsPickupQuantity);
 Browser.instance.findElement(TenderEntryPage.BillsPickupQuantity).sendKeys(RandomNumberString);
 Browser.instance.findElement(TenderEntrySaveButton).click();
+Thread.sleep(3000);
 wait.until(ExpectedConditions.elementToBeClickable(TenderEntryExitButton));
 Browser.instance.findElement(TenderEntryExitButton).click();
 wait.until(ExpectedConditions.elementToBeClickable(exitButton));
@@ -129,7 +137,7 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 	//Verify the total Tender Entry Amount
 	public static void VerifyTenderAmount() throws Exception
 	{
-		Browser.instance.findElement(BagIdTextField).sendKeys("3002");
+		Browser.instance.findElement(BagIdTextField).sendKeys("2002");
 		Robot robot = new Robot();
 		robot.keyPress(KeyEvent.VK_TAB);
 		robot.keyRelease(KeyEvent.VK_TAB);
@@ -137,8 +145,10 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
 	    robot.keyPress(KeyEvent.VK_PAGE_DOWN);
 	    robot.keyRelease(KeyEvent.VK_PAGE_DOWN);
-	    wait.until(ExpectedConditions.visibilityOfElementLocated(FirstTenderEntryNew));
-	    List<WebElement> TenderList1 = Browser.instance.findElements(TenderEntriesListNew);
+	    wait.until(ExpectedConditions.visibilityOfElementLocated(tenderEntrySection));
+		WebElement tenderEntryTable = Browser.instance.findElement(tenderEntrySection);
+	    //wait.until(ExpectedConditions.visibilityOfElementLocated(FirstTenderEntryNew));
+	    List<WebElement> TenderList1 = tenderEntryTable.findElements(TenderEntriesListNew);
 	 
 		  int row_num=1;
 			double ExpectedTotalTender=0.0d;
@@ -217,9 +227,15 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 	//Exit Page
 	public static void Exit()
 	{
-		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
+		WebDriverWait wait= new WebDriverWait(Browser.instance,30);
 		Browser.instance.findElement(exitButton).click();
 		wait.until(ExpectedConditions.elementToBeClickable(TransactionsMenu));
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+
+			e.printStackTrace();
+		}
 		
 		
 	}
@@ -234,20 +250,18 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 	}
 
 	public static void returnBag() {
+		Browser.instance.findElement(BagIdTextField).clear();
+		Browser.instance.findElement(BagIdTextField).sendKeys(Keys.TAB);
 		Browser.instance.findElement(BagIdTextField).sendKeys(bagID);
-		Robot robot;
+		Browser.instance.findElement(BagIdTextField).sendKeys(Keys.TAB);
+		
 		try {
-			robot = new Robot();
-			robot.keyPress(KeyEvent.VK_TAB);
-			robot.keyRelease(KeyEvent.VK_TAB);
 			Thread.sleep(2000);
-		} catch (AWTException | InterruptedException e) {
-			// TODO Auto-generated catch block
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
 		Browser.instance.findElement(editButton).click();
-		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
+		WebDriverWait wait= new WebDriverWait(Browser.instance,30);
 		wait.until(ExpectedConditions.elementToBeClickable(returnButton));
 		Browser.instance.findElement(returnButton).click();
 		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
@@ -258,30 +272,37 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 	}
 
 	public static void close() {
-		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
+		System.out.println("Going to click close button");
+		WebDriverWait wait= new WebDriverWait(Browser.instance,30);
+		wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 		Browser.instance.findElement(exitButton).click();
 		wait.until(ExpectedConditions.elementToBeClickable(TransactionsMenu));
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			
+			e.printStackTrace();
+		}
+		System.out.println("Bag usage form is closed");
 	}
 
 	public static void editAndSaveBag() {
 		
 		Browser.instance.findElement(BagIdTextField).sendKeys(bagID);
-		Robot robot;
+		Browser.instance.findElement(BagIdTextField).sendKeys(Keys.TAB);
 		try {
-			robot = new Robot();
-			robot.keyPress(KeyEvent.VK_TAB);
-			robot.keyRelease(KeyEvent.VK_TAB);
-			Thread.sleep(2000);
-		} catch (AWTException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Thread.sleep(3500);
+		} catch (InterruptedException e) {
+			System.out.println("Caught an exception");
+			//e.printStackTrace();
 		}
+		System.out.println("Going to click edit button");
 		Browser.instance.findElement(editButton).click();
-		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
+		WebDriverWait wait= new WebDriverWait(Browser.instance,30);
 		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 		
 		
-		
+		System.out.println("Going to click save button");
 		Browser.instance.findElement(saveButton).click();
 		wait.until(ExpectedConditions.elementToBeClickable(editButton));
 	}
@@ -293,29 +314,31 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 
 	public static void editAndCancelBag() {
 		Browser.instance.findElement(BagIdTextField).sendKeys(bagID);
-		Robot robot;
+		Browser.instance.findElement(BagIdTextField).sendKeys(Keys.TAB);
 		try {
-			robot = new Robot();
-			robot.keyPress(KeyEvent.VK_TAB);
-			robot.keyRelease(KeyEvent.VK_TAB);
-			Thread.sleep(2000);
-		} catch (AWTException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			System.out.println("Caught an exception");
+			//e.printStackTrace();
 		}
+		
 		Browser.instance.findElement(editButton).click();
-		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
+		WebDriverWait wait= new WebDriverWait(Browser.instance,30);
 		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 		
 		
 		
 		Browser.instance.findElement(cancelButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		Browser.instance.findElement(confirmYesButton).click();
 		wait.until(ExpectedConditions.elementToBeClickable(editButton));
 		
 	}
 
 	public static void checkReturnedStatus() {
+		BuildBagsPage.goTo();
 		BuildBagsPage.checkReturnedStatus(bagID);
+		BuildBagsPage.close();
 		
 	}
 	}

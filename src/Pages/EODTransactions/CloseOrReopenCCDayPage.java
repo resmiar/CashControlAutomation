@@ -67,7 +67,12 @@ try
 		Browser.instance.findElement(CloseCCDayButton).click();
 }
 		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
 		
+			e1.printStackTrace();
+		}
 		  try
 		  {
 			  wait.until(ExpectedConditions.invisibilityOfElementLocated(BufferImg));

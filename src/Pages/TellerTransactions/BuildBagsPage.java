@@ -2,14 +2,13 @@ package Pages.TellerTransactions;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.pagefactory.ByChained;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import Initialization.Browser;
 import Pages.Maintenance.BagTypePage;
 
@@ -22,8 +21,10 @@ public class BuildBagsPage {
 	static By exitButton=By.xpath("//span[.='Exit']");
 	static By EmptyToBuiltArrow=By.xpath("//button[@data-ng-if='isLeft']");
 	static By BuiltToEmptyArrow=By.xpath("//button[@data-ng-if='!isLeft']");
-	static By EmptyBagsList=By.xpath("//div[@class='ui-grid-cell-contents ng-binding ng-scope']");
-	static By BuiltBagsList=By.xpath("//div[@class='ui-grid-cell-contents ng-binding ng-scope']");
+	//static By emptyBagsSection = By.xpath("//div[@class='empty-bags-listing']");
+	static By builtBagsSection = By.xpath("//div[@ui-grid='gridBuiltBags']");
+	static By EmptyBagsList=By.xpath(".//div[@class='ui-grid-cell-contents ng-binding ng-scope']");
+	static By BuiltBagsList=By.xpath("//div[@class = 'build-bags-listing']/div/div/div/div/div[2]/div/div[2]/div/div/div/div");
 	static By CountBuiltBags=By.xpath("(//span[contains(@class,'blue-text ng-binding')])[2]");
 	static By CountEmptyBags=By.xpath("(//span[contains(@class,'blue-text ng-binding')])[1]");
 	static String Select=null;
@@ -49,22 +50,21 @@ public class BuildBagsPage {
 		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 		Select BagTypeDescription=new Select(Browser.instance.findElement(BagTypeDropdown));
-		BagTypeDescription.selectByVisibleText("CERT");
+		//BagTypeDescription.selectByVisibleText("CERT");
+		BagTypeDescription.selectByIndex(2);
 		wait.until(ExpectedConditions.elementToBeClickable(BuildBtn));
 		Browser.instance.findElement(BuildBtn).click();
-		List<WebElement> rows = Browser.instance.findElements(EmptyBagsList);
+		WebElement emptyBagsSection = Browser.instance.findElement(By.xpath("//div[@class='empty-bags-listing']"));
+		List<WebElement> rows = emptyBagsSection.findElements(EmptyBagsList);//Browser.instance.findElements(EmptyBagsList);
+		
 	    int iSize = rows.size();
 	    //System.out.println("No: of empty bags:"+iSize);
-//	    if (iSize!=0)
-//	    {
-	    for (int i = 0; i < iSize; i++)
+	    if (iSize!=0)
 	    {
 	    	String Select=rows.get(0).getText();
 	    	rows.get(0).click();
 	    	 Browser.instance.findElement(EmptyToBuiltArrow).click();
 	    	 System.out.println(Select+" Bag is converted to built");
-	 	    
-	        break;
                 }
 	    
 	   // wait.until(ExpectedConditions.elementToBeClickable(EmptyToBuiltArrow));
@@ -84,7 +84,7 @@ public class BuildBagsPage {
 	
 		public static void VerifyEmptyBag() throws Exception
 		{
-			WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+			//WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 			Select BagTypeDescription=new Select(Browser.instance.findElement(BagTypeDropdown));
 			BagTypeDescription.selectByVisibleText("GREYBOX");
 			Browser.instance.findElement(BuildBtn).click();
@@ -134,7 +134,7 @@ public class BuildBagsPage {
 		//Select New Bag
 		public static void SelectNewBag() throws Exception
 		{
-			WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+			//WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 			SelectBag("GREYBOX");
 			Browser.instance.findElement(BuildBtn).click();
 			Thread.sleep(2000);
@@ -199,8 +199,9 @@ public class BuildBagsPage {
 		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 		
 		//BagID= null;
-		
-		List<WebElement> ids = Browser.instance.findElements(EmptyBagsList);
+		WebElement emptyBagsSection = Browser.instance.findElement(By.xpath("//div[@class='empty-bags-listing']"));
+		List<WebElement> ids = emptyBagsSection.findElements(EmptyBagsList);
+		//List<WebElement> ids = Browser.instance.findElements(EmptyBagsList);
 	    //int iSize = ids.size();
 	    for (WebElement we : ids) 
 	    {
@@ -223,21 +224,23 @@ public class BuildBagsPage {
 	}
 
 	public static void emptyOnebag() {
-Browser.instance.findElement(BuildBtn).click();
+		Browser.instance.findElement(BuildBtn).click();
 		
 		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 		
-		List<WebElement> rows = Browser.instance.findElements(BuiltBagsList);
+		System.out.println("Going to empty one bag");
+		WebElement builtBagsSection = Browser.instance.findElement(By.xpath("//div[@ui-grid='gridBuiltBags']"));
+		//List<WebElement> rows = Browser.instance.findElements(new ByChained (builtBagsSection, EmptyBagsList));
+		List<WebElement> rows = builtBagsSection.findElements(EmptyBagsList);
 	    int iSize = rows.size();
-	    for (int i = 0; i < iSize; i++) 
-	    {
-	    	//String Select=rows.get(0).getText();
+	    if (iSize!=0)
+	    {	  
+	    	System.out.println(rows.get(0).getText());
 	    	rows.get(0).click();
-	    	 Browser.instance.findElement(BuiltToEmptyArrow).click();
-	 	    
-	        break;
-                }
+	    	//rows.get(iSize-1).click();
+	    	Browser.instance.findElement(BuiltToEmptyArrow).click();
+         }
 	    Browser.instance.findElement(saveButton).click();
 	    wait.until(ExpectedConditions.elementToBeClickable(BuildBtn));
 	}
@@ -260,13 +263,11 @@ Browser.instance.findElement(BuildBtn).click();
 		
 		List<WebElement> rows = Browser.instance.findElements(EmptyBagsList);
 	    int iSize = rows.size();
-	    for (int i = 0; i < iSize; i++) 
+	    if (iSize!=0) 
 	    {
 	    	//String Select=rows.get(0).getText();
 	    	rows.get(0).click();
 	    	 Browser.instance.findElement(EmptyToBuiltArrow).click();
-	 	    
-	        break;
                 }
 	    Browser.instance.findElement(cancelButton).click();
 		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));

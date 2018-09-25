@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,6 +15,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import Initialization.Browser;
+import Initialization.DatabaseConnection;
 import Initialization.GenerateRandomValue;
 import Pages.TellerTransactions.BuildBagsPage;
 
@@ -94,7 +96,8 @@ public static void AddBagTypeDetails()
 	WebDriverWait wait=new WebDriverWait(Browser.instance,10);
 	wait.until(ExpectedConditions.visibilityOfAllElements(Browser.instance.findElements(BagTypeDescriptionDropdown)));
 	Select BagTypeDescription=new Select(Browser.instance.findElement(BagTypeDescriptionDropdown));
-	BagTypeDescription.selectByVisibleText("CERT");
+	//BagTypeDescription.selectByVisibleText("CERT");
+	BagTypeDescription.selectByIndex(2);
 	Browser.instance.findElement(editButton).click();
 	
 	for(int i=0;i<2;i++)
@@ -361,6 +364,11 @@ public static void ExitPage()
 
 //Selecting BagTypeDetails
 public static void selectBagTypeDetails(String TenderDesc) {
+	try {
+		Thread.sleep(2000);
+	} catch (InterruptedException e) {
+		e.printStackTrace();
+	}
 	List<WebElement> rows = Browser.instance.findElements(BagTypeColumn);
     int iSize = rows.size();
     if (iSize!=0) 
@@ -386,6 +394,7 @@ public static void selectBagTypeDetails(String TenderDesc) {
 
 public static void CreateduplicateBagIdVerify() 
 {
+	
 	Browser.instance.findElement(editButton).click();
 	WebDriverWait wait=new WebDriverWait(Browser.instance,10);
 	wait.until(ExpectedConditions.elementToBeClickable(addButton));
@@ -393,13 +402,15 @@ public static void CreateduplicateBagIdVerify()
 	
 	Browser.instance.findElement(BagsTab).click();
 	
+	wait.until(ExpectedConditions.elementToBeClickable(addButton));
 	Browser.instance.findElement(addButton).click();
 	
 	
 	wait.until(ExpectedConditions.elementToBeClickable(BagIdCancelBtn));
 	//Browser.instance.findElement(BagsField).sendKeys(RandomId+"");
-	Browser.instance.findElement(BagsField).sendKeys("10");
-	Browser.instance.findElement(ActiveCheckBox).click();
+	Browser.instance.findElement(BagsField).sendKeys("1009998");
+	Browser.instance.findElement(BagsField).sendKeys(Keys.TAB);
+	//Browser.instance.findElement(ActiveCheckBox).click();
 	
 		
 		try
@@ -445,7 +456,7 @@ public static void CreateduplicateBagIdVerify()
 //Creating new Bagid
 public static void CreateBagId() 
 {
-	
+	Browser.instance.findElement(editButton).click();
 	WebDriverWait wait=new WebDriverWait(Browser.instance,10);
 	wait.until(ExpectedConditions.elementToBeClickable(addButton));
 	RandomId=GenerateRandomValue.generateRandomInteger();
@@ -456,7 +467,7 @@ public static void CreateBagId()
 	
 	
 	wait.until(ExpectedConditions.elementToBeClickable(BagIdCancelBtn));
-	Browser.instance.findElement(BagsField).sendKeys(RandomId+"");
+	Browser.instance.findElement(BagsField).sendKeys("1009998");
 	
 	Browser.instance.findElement(ActiveCheckBox).click();
 	Browser.instance.findElement(BagIdSaveBtn).click();
@@ -528,7 +539,8 @@ public static void CreateBagId()
 	{
 			
 		Select BagTypeDescription=new Select(Browser.instance.findElement(BagTypeDescriptionDropdown));
-		BagTypeDescription.selectByVisibleText("CERT");
+		//BagTypeDescription.selectByVisibleText("CERT");
+		BagTypeDescription.selectByIndex(2);
 		Browser.instance.findElement(BagsTab).click();
 		
 		CountBagBuilt();
@@ -546,7 +558,8 @@ public static void CreateBagId()
 		WebDriverWait wait=new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.visibilityOfAllElements(Browser.instance.findElements(BagTypeDescriptionDropdown)));
 		Select BagTypeDescription=new Select(Browser.instance.findElement(BagTypeDescriptionDropdown));
-		BagTypeDescription.selectByVisibleText("GREYBOX");
+		//BagTypeDescription.selectByVisibleText("GREYBOX");
+		BagTypeDescription.selectByIndex(1);
 		Browser.instance.findElement(editButton).click();
 		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 		Browser.instance.findElement(BagsTab).click();
@@ -639,6 +652,12 @@ public static void CreateBagId()
 		        //}
 			//}
 			}
+
+
+		public static void deleteAddedBag() {
+			DatabaseConnection.deleteAddedBag();
+			
+		}
 }
 
 

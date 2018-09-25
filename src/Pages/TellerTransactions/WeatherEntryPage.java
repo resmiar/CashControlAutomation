@@ -221,7 +221,7 @@ public static int generateRandomInteger() {
 public static void SelectWeather()
 {
 	Select Weather=new Select(Browser.instance.findElement(DORWeatherDescriptionDropdown));
-    Weather.selectByVisibleText("Sunny");
+    Weather.selectByIndex(2);
 }
 //Clear text field
 public static void Clear(By Locator) 

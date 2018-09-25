@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import Initialization.Browser;
+import Initialization.DataProvider;
 
 public class CashControlPage {
 	
@@ -33,7 +34,9 @@ public class CashControlPage {
 		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(dateValue));
 		ccGroup.selectByIndex(0);
-		Browser.instance.findElement(dateValue).sendKeys("05012018");
+		//Browser.instance.findElement(dateValue).sendKeys("05012018");
+		System.out.println(DataProvider.getValueOf("CC Date")+ " is the date");
+		Browser.instance.findElement(dateValue).sendKeys(DataProvider.getValueOf("CC Date"));
 		Browser.instance.findElement(okButton).click();
 		Browser.instance.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
 		try {

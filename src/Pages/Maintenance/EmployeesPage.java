@@ -3,6 +3,9 @@ package Pages.Maintenance;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -21,27 +24,53 @@ public class EmployeesPage {
 	static By deleteButton = By.xpath("(//button[@type='button'])[8]");
 	static By exitButton = By.xpath("(//button[@type='button'])[9]");
 	static By eidfield = By.id("txtSSNNo");
-	static By badgeDropdown = By.xpath("//div[@id='EmployeesContent']/div[4]/div/div[3]/div/div/div/select");
+	static By badgeDropdown = By.xpath("//select[@ng-model='selectedObject.selectedBadge']");
 	static By firstNameField = By.xpath("//input[@type='text']");
 	static By lastNameField = By.xpath("(//input[@type='text'])[2]");
 	static By addBadgeButton = By.xpath("(//button[@type='button'])[10]");
 	static By badgeField = By.id("txtBadgeNumber");
 	static By badgeConfirmationButton = By.xpath("(//button[@type='button'])[19]");
-	static By editBadgeButton;
+	static By editBadgeButton=By.xpath("//button[@data-ng-disabled='disableCtrls.btnBtmEdit']");
 	static By badgeActiveCheckBox = By.xpath("//input[@type='checkbox']");
+	static By saveBadgeButton = By.xpath("(//button[@type='button'])[2]");
 	static String eIDValue = GenerateRandomValue.generateRandomStringtest();
-	static String badgeIDValue = GenerateRandomValue.generateRandomStringtest();
+	static String badgeIDValue= GenerateRandomValue.generateRandomStringtest();
 	static By confirmYesButton = By.xpath("(//button[@type='button'])[15]");
 	static int errorMessageScenario;
 	static By errorMessageDiv = By.xpath("//div[@class='full-width-form']");
 
-	public static void addNew() {
+	public static void addNew()  {
 		Browser.instance.findElement(addNew).click();
-		Browser.instance.findElement(eidfield).sendKeys(badgeIDValue);
+		//badgeIDValue = GenerateRandomValue.generateRandomStringtest();
+		Browser.instance.findElement(firstNameField).sendKeys(eIDValue);
+		Browser.instance.findElement(lastNameField).sendKeys(eIDValue);
+		Browser.instance.findElement(eidfield).sendKeys(eIDValue);
+		Browser.instance.findElement(eidfield).sendKeys(Keys.TAB);
+		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		Browser.instance.findElement(confirmYesButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(addBadgeButton));
+		Browser.instance.findElement(addBadgeButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(badgeField));
+		Browser.instance.findElement(badgeField).click();
+		Browser.instance.findElement(badgeField).sendKeys(badgeIDValue);
+		Browser.instance.findElement(badgeField).sendKeys(Keys.TAB);
+		wait.until(ExpectedConditions.elementToBeClickable(badgeConfirmationButton));
+		Browser.instance.findElement(badgeConfirmationButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(saveBadgeButton));
+		Browser.instance.findElement(saveBadgeButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 		Browser.instance.findElement(saveButton).click();
 		System.out.println("Added the region: " +badgeIDValue);
-		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		Browser.instance.findElement(confirmYesButton).click();
 		wait.until(ExpectedConditions.elementToBeClickable(addNew));
+		try {
+			Thread.sleep(7000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Completed the wait");
 	}
 
 	public static void close() {
@@ -68,12 +97,30 @@ public class EmployeesPage {
 		regionValue.selectByVisibleText(badgeIDValue);
 		badgeIDValue = badgeIDValue+"test";
 		Browser.instance.findElement(editButton).click();
-		Browser.instance.findElement(eidfield).sendKeys(badgeIDValue);
-		Browser.instance.findElement(saveButton).click();
-		System.out.println("Edited the region: " +badgeIDValue);
-		//regionName = regionName.substring(0, regionName.length() - 4);
 		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
-		wait.until(ExpectedConditions.elementToBeClickable(addNew));	
+		wait.until(ExpectedConditions.elementToBeClickable(addBadgeButton));
+		Browser.instance.findElement(editBadgeButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(badgeField));
+		Browser.instance.findElement(badgeField).click();
+		Browser.instance.findElement(badgeField).clear();
+		Browser.instance.findElement(badgeField).sendKeys(badgeIDValue);
+		Browser.instance.findElement(badgeField).sendKeys(Keys.TAB);
+		wait.until(ExpectedConditions.elementToBeClickable(badgeConfirmationButton));
+		Browser.instance.findElement(badgeConfirmationButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(saveBadgeButton));
+		Browser.instance.findElement(saveBadgeButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+		Browser.instance.findElement(saveButton).click();
+		System.out.println("Added the region: " +badgeIDValue);
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		Browser.instance.findElement(confirmYesButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(addNew));
+		try {
+			Thread.sleep(7000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Completed the wait");	
 	}
 
 	public static void goTo() {
@@ -89,6 +136,15 @@ public class EmployeesPage {
 	public static boolean isAdded() {
 		Select regionValue = new Select(Browser.instance.findElement(badgeDropdown));
 		Boolean found = false;
+		System.out.println(regionValue.getFirstSelectedOption().getText());
+		String actualValue = regionValue.getFirstSelectedOption().getText();
+		if (badgeIDValue.equals(actualValue))
+		{
+			found = true;
+			System.out.println("The "+ badgeIDValue +" has been added");
+		}
+		else
+		{
 		List<WebElement> allOptions = regionValue.getOptions();
 		loop:
 		for (WebElement we : allOptions) {
@@ -100,23 +156,21 @@ public class EmployeesPage {
 	            }
 	        }
 		}
+		}
 		return found;
 	}
 
 	public static boolean isEdited() {
 		Select regionValue = new Select(Browser.instance.findElement(badgeDropdown));
 		Boolean found = false;
-		List<WebElement> allOptions = regionValue.getOptions();
-		loop:
-		for (WebElement we : allOptions) {
-	        for (int i = 0; i < allOptions.size(); i++) {
-	            if (we.getText().contains(badgeIDValue)) {
-	                found = true;
-	                System.out.println("The "+ badgeIDValue +" has been edited");
-	                break loop;
-	            }
-	        }
+		try {
+			regionValue.selectByVisibleText(badgeIDValue);
+			found=true;
 		}
+		catch (NoSuchElementException e) {
+			found=false;
+		}
+
 		return found;
 	}
 
@@ -140,7 +194,7 @@ public class EmployeesPage {
 		String textMessage;
 		switch(errorMessageScenario) { 
     case 1: 
-    	{textMessage = "Region already exist.";
+    	{textMessage = "Cannot save [ Employee ] record. There is already one with this EID.";
     	String actualMessage = Browser.instance.findElement(errorMessageDiv).getText();
     	if (actualMessage.equals(textMessage)) {
     		System.out.println("Inside if block");
@@ -148,7 +202,7 @@ public class EmployeesPage {
     	
     	break;}
     case 2: 
-    	{textMessage = "Please enter region.";
+    	{textMessage = "There can only be (1) active badge.";
     	String actualMessage = Browser.instance.findElement(errorMessageDiv).getText();
     	if (actualMessage.equals(textMessage)) {
     		System.out.println("Inside if block");
@@ -165,28 +219,40 @@ public class EmployeesPage {
 		return returnValue;	
 	}
 
-	public static void addNewWithBlankDescription() {
-		Browser.instance.findElement(addNew).click();
-		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
-		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
-		Browser.instance.findElement(saveButton).click();
-		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
-		errorMessageScenario = 2;
-		
-	}
 
 	public static void addEmployeeAgain() {
 		Browser.instance.findElement(addNew).click();
-		Browser.instance.findElement(eidfield).sendKeys(badgeIDValue);
-		Browser.instance.findElement(saveButton).click();
+		//badgeIDValue = GenerateRandomValue.generateRandomStringtest();
+		Browser.instance.findElement(firstNameField).sendKeys(eIDValue);
+		Browser.instance.findElement(lastNameField).sendKeys(eIDValue);
+		Browser.instance.findElement(eidfield).sendKeys(eIDValue);
+		Browser.instance.findElement(eidfield).sendKeys(Keys.TAB);
 		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
 		errorMessageScenario = 1;
 	}
 
 	public static void addBadgeAgain() {
-		
-		errorMessageScenario = 3;
+		Select regionValue = new Select(Browser.instance.findElement(badgeDropdown));
+		regionValue.selectByVisibleText(badgeIDValue);
+		Browser.instance.findElement(editButton).click();
+		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
+		wait.until(ExpectedConditions.elementToBeClickable(addBadgeButton));
+		Browser.instance.findElement(addBadgeButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(badgeField));
+		Browser.instance.findElement(badgeField).click();
+		Browser.instance.findElement(badgeField).sendKeys(badgeIDValue+"1");
+		Browser.instance.findElement(badgeField).sendKeys(Keys.TAB);
+		wait.until(ExpectedConditions.elementToBeClickable(badgeConfirmationButton));
+		Browser.instance.findElement(badgeConfirmationButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(saveBadgeButton));
+		Browser.instance.findElement(saveBadgeButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+		Browser.instance.findElement(saveButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		Browser.instance.findElement(confirmYesButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		errorMessageScenario = 2;
 	}
 
 	
