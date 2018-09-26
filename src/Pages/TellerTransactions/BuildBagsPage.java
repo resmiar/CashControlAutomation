@@ -162,13 +162,18 @@ public class BuildBagsPage {
 		//Exit Page
 		public static void Exit()
 		{
-			WebDriverWait wait= new WebDriverWait(Browser.instance,10);
+			WebDriverWait wait= new WebDriverWait(Browser.instance,30);
 			Browser.instance.findElement(exitButton).click();
 			wait.until(ExpectedConditions.elementToBeClickable(TransactionsMenu));
 			
 		}
 
 	public static void close() {
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		Browser.instance.findElement(exitButton).click();
 		WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 		wait.until(ExpectedConditions.elementToBeClickable(TransactionsMenu));
@@ -300,6 +305,17 @@ Browser.instance.findElement(BuildBtn).click();
 	    	if(BagID.equalsIgnoreCase(bagID2))
 	        break;
                 }
+	}
+
+	public static void returnAndEmpty() {
+		BagUsagePage.goTo();
+		BagUsagePage.returnBag(BagID);	
+		BagUsagePage.close();
+		goTo();
+		selectBagType();
+		emptyOnebag();
+		close();
+		
 	}
 
 

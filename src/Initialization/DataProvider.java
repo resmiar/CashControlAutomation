@@ -78,6 +78,27 @@ public class DataProvider {
 		returnValue = cell.getStringCellValue();
 		break;
 	}
+	case ("DB URL"):
+	{
+		row = sheet.getRow(6);
+		cell = row.getCell(2);
+		returnValue = cell.getStringCellValue();
+		break;
+	}
+	case ("DB User ID"):
+	{
+		row = sheet.getRow(7);
+		cell = row.getCell(2);
+		returnValue = cell.getStringCellValue();
+		break;
+	}
+	case ("DB Password"):
+	{
+		row = sheet.getRow(8);
+		cell = row.getCell(2);
+		returnValue = cell.getStringCellValue();
+		break;
+	}
 	}
 	return returnValue;
 

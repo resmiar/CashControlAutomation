@@ -270,6 +270,28 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 		
 		
 	}
+	
+	public static void returnBag(String bagName) {
+		Browser.instance.findElement(BagIdTextField).clear();
+		Browser.instance.findElement(BagIdTextField).sendKeys(Keys.TAB);
+		Browser.instance.findElement(BagIdTextField).sendKeys(bagName);
+		Browser.instance.findElement(BagIdTextField).sendKeys(Keys.TAB);
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		Browser.instance.findElement(editButton).click();
+		WebDriverWait wait= new WebDriverWait(Browser.instance,30);
+		wait.until(ExpectedConditions.elementToBeClickable(returnButton));
+		Browser.instance.findElement(returnButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(confirmYesButton));
+		Browser.instance.findElement(confirmYesButton).click();
+		
+		
+		
+	}
 
 	public static void close() {
 		System.out.println("Going to click close button");

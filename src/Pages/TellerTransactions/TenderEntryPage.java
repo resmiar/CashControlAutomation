@@ -132,6 +132,7 @@ public class TenderEntryPage {
 	
 	static String NewCCDate;
 	static String CurrentCCDate;
+	static String bagID;
 	
 	//Goto Tender Entry Page
 	public static void goTo() {
@@ -228,7 +229,8 @@ public class TenderEntryPage {
 	//Add New Tender Entry
 	public static void AddNewTenderEntry() throws Exception
 	{
-		AddNewEntry("2002","3345");
+		System.out.println("Going to select the bag "+bagID);
+		AddNewEntry(bagID,"3345");
 	}
 	
 	//Add New Tender Entry
@@ -556,7 +558,7 @@ public static void VerifyExistingEntries() throws Exception
 		SelectDropdown(TimeDropdown,"2:00 pm");
 		Thread.sleep(2000);
 		Browser.instance.findElement(BagSelectionButton).click();
-		SelectItem("2002",BagIdList);
+		SelectItem(bagID,BagIdList);
 		Thread.sleep(1000);
 		Browser.instance.findElement(selectButton).click();
 	 wait.until(ExpectedConditions.elementToBeClickable(ExistingTenderEntriesNewButton));
@@ -568,7 +570,7 @@ VerifyBillsandCoinsCalculations();
 Browser.instance.findElement(saveButton).click();
 wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 Browser.instance.findElement(BagSelectionButton).click();
-SelectItem("2002",BagIdList);
+SelectItem(bagID,BagIdList);
 Thread.sleep(1000);
 try
 {
@@ -577,7 +579,7 @@ Browser.instance.findElement(selectButton).click();
 catch(Exception t)
 {
 	Browser.instance.findElement(BagSelectionButton).click();
-	SelectItem("2002",BagIdList);
+	SelectItem(bagID,BagIdList);
 	Browser.instance.findElement(selectButton).click();
 }
  wait.until(ExpectedConditions.elementToBeClickable(ExistingTenderEntriesNewButton));
@@ -730,10 +732,20 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 		robot.keyRelease(KeyEvent.VK_TAB);
 	}
 
+	public static void checkOutBagForTrans() {
+			bagID= CheckoutBagsPage.BuildBagForCheckout();
+			CheckoutBagsPage.goTo();
+			CheckoutBagsPage.selectBadgeAndLoc();
+			CheckoutBagsPage.selectBag();
+			CheckoutBagsPage.saveCheckout();
+			CheckoutBagsPage.close();
+		}
+		
+		
+		
+	}
+
 	
 	
 	
-	
-	
-	
-}
+

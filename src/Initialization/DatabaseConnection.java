@@ -14,10 +14,15 @@ static int data2=0;
 	 
 	    public static void dataBaseSetUp() {
 	           
-	    	String databaseURL=  "jdbc:sqlserver://192.168.6.204\\MSSQLSERVER2016;databaseName=SFOT_MCCC;";
-	            String user = "MacUser";
-	            String password = "MacUser";
-	            
+	    		//String databaseURL=  "jdbc:sqlserver://192.168.6.204\\MSSQLSERVER2016;databaseName=SFOT_MCCC;";
+	            //String user = "MacUser";
+	            //String password = "MacUser";
+	            String databaseURL=  DataProvider.getValueOf("DB URL");
+	            String user = DataProvider.getValueOf("DB User ID");
+	            String password = DataProvider.getValueOf("DB Password");
+	            System.out.println(databaseURL);
+	            System.out.println(user);
+	            System.out.println(password);
 	            connection = null;
 	            try {
 	            	Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -103,6 +108,44 @@ public static int updateDatatoDb(String inputQuery) {
 		System.out.println("The result string is "+resultString);
 		return resultString;						
 		}
+	
+	public static String returnBagUsageID(String selectQuery) {
+		String resultString = null;
+		try {
+			dataBaseSetUp();
+			System.out.println("query: "+selectQuery);
+			statement = connection.createStatement();
+			rs = statement.executeQuery(selectQuery);
+			while (rs.next()) {
+			 resultString=rs.getString("bagUsageID");}
+			}
+		catch (SQLException ex) {
+	           ex.printStackTrace();}
+		
+
+		//String resultString = rs.toString(); 
+		System.out.println("The result string is "+resultString);
+		return resultString;						
+		}
+	
+	public static String returnBagTypeID(String selectQuery) {
+		String resultString = null;
+		try {
+			dataBaseSetUp();
+			System.out.println("query: "+selectQuery);
+			statement = connection.createStatement();
+			rs = statement.executeQuery(selectQuery);
+			while (rs.next()) {
+			 resultString=rs.getString("bagtypeID");}
+			}
+		catch (SQLException ex) {
+	           ex.printStackTrace();}
+		
+
+		//String resultString = rs.toString(); 
+		System.out.println("The result string is "+resultString);
+		return resultString;						
+		}
 
 	 
 	    public static void tearDown() {
@@ -139,6 +182,45 @@ public static int updateDatatoDb(String inputQuery) {
 			           ex.printStackTrace();}
 				System.out.println("Deleted 1009998 ba successsfully");						
 				}
+
+
+			public static void cleanupTrans() {
+				String bagUsageIDValue = returnBagUsageID("select bagUsageID from bagUsage where bagAlias = 'BAGFORTEST'");  
+				
+				if (bagUsageIDValue!=null) {
+					updateDatatoDb("delete from SalesTransactions where bagUsageID = '"+bagUsageIDValue+"'" );
+					updateDatatoDb("delete from CashTransDetails where bagUsageID = '"+bagUsageIDValue+"'" );
+					updateDatatoDb("delete from CashTransactions where bagUsageID = '"+bagUsageIDValue+"'");
+					updateDatatoDb("delete from bagusage where bagUsageID = '"+bagUsageIDValue+"'");
+					
+					System.out.println("Transaction entries deleted for BagForTest");
+				}
+					
+				 bagUsageIDValue = returnBagUsageID("select bagUsageID from bagUsage where bagAlias = 'BAGFORTEST1'");  
+					
+					if (bagUsageIDValue!=null) {
+						updateDatatoDb("delete from SalesTransactions where bagUsageID = '"+bagUsageIDValue+"'" );
+						updateDatatoDb("delete from CashTransDetails where bagUsageID = '"+bagUsageIDValue+"'" );
+						updateDatatoDb("delete from CashTransactions where bagUsageID = '"+bagUsageIDValue+"'");
+						updateDatatoDb("delete from bagusage where bagUsageID = '"+bagUsageIDValue+"'");
+						
+						System.out.println("Transaction entries deleted for bagForTest1");
+				}
+			}
+
+
+			public static void deleteBagType() {
+				String bagTypeIDValue = returnBagTypeID("select bagtypeID from bagtypes where Bagdesc='AutomationTestBagType'");  
+				
+				if (bagTypeIDValue!=null) {
+					updateDatatoDb("delete from bags where bagTypeID = '"+bagTypeIDValue+"'" );
+					updateDatatoDb("delete from bagTypes where bagTypeID = '"+bagTypeIDValue+"'");
+					
+					System.out.println("Deleted test bag type");
+				}
+				
+				
+			}
 
 			
 			

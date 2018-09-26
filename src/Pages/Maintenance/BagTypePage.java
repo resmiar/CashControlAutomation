@@ -522,6 +522,13 @@ public static void CreateBagId()
 		WebDriverWait wait = new WebDriverWait(Browser.instance,20);
 		wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 		Browser.instance.findElement(exitButton).click();	
+		wait.until(ExpectedConditions.elementToBeClickable(TransactionsMenu));
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -609,6 +616,7 @@ public static void CreateBagId()
 			
 			Select BagTypeValue = new Select(Browser.instance.findElement(BagTypeDescriptionDropdown));
 			try {
+				Thread.sleep(2000);
 				BagTypeValue.selectByVisibleText("AutomationTestBagType");
 			}
 			catch(Exception e)
@@ -635,13 +643,21 @@ public static void CreateBagId()
 				
 				Browser.instance.findElement(saveButton).click();			
 				wait.until(ExpectedConditions.elementToBeClickable(newButton));
-			}
+			////}
 				
 				selectBagTypeDetails("AutomationTestBagType");
 				Browser.instance.findElement(editButton).click();
-				WebDriverWait wait=new WebDriverWait(Browser.instance,10);
+				//WebDriverWait wait=new WebDriverWait(Browser.instance,10);
 				wait.until(ExpectedConditions.elementToBeClickable(saveButton));
-				CreateBagId() ;
+				CreateBagId("BagForTest") ;
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e1) {
+					e.printStackTrace();
+				}
+				CreateBagId("BagForTest2");
+			}
+				//saveBagType();
 			//List<WebElement> allOptions = BagTypeValue.getOptions();
 			//loop:
 			//for (WebElement we : allOptions) {
@@ -652,6 +668,44 @@ public static void CreateBagId()
 		        //}
 			//}
 			}
+		public static void CreateBagId(String BagName) 
+		{
+			Browser.instance.findElement(editButton).click();
+			WebDriverWait wait=new WebDriverWait(Browser.instance,10);
+			wait.until(ExpectedConditions.elementToBeClickable(addButton));
+			RandomId=GenerateRandomValue.generateRandomInteger();
+			
+			Browser.instance.findElement(BagsTab).click();
+			
+			Browser.instance.findElement(addButton).click();
+			
+			
+			wait.until(ExpectedConditions.elementToBeClickable(BagIdCancelBtn));
+			Browser.instance.findElement(BagsField).sendKeys(BagName);
+			
+			Browser.instance.findElement(ActiveCheckBox).click();
+			Browser.instance.findElement(BagIdSaveBtn).click();
+		//}
+			
+		//public static void saveBagType(){
+			//WebDriverWait wait=new WebDriverWait(Browser.instance,10);
+			try {
+				
+				
+				Browser.instance.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+				Browser.instance.findElement(saveButton).click();
+				
+				wait.until(ExpectedConditions.elementToBeClickable(editButton));
+			}
+			catch(Exception e)
+			{
+				Browser.instance.findElement(BagIdSaveBtn).click();
+				wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+				Browser.instance.findElement(saveButton).click();
+				wait.until(ExpectedConditions.elementToBeClickable(editButton));
+			}
+
+		}
 
 
 		public static void deleteAddedBag() {

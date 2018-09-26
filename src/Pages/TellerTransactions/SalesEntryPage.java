@@ -106,7 +106,7 @@ public class SalesEntryPage {
 	static By AutoSalesOnlyConfirmButton=By.xpath("//button[.='OK']");
 	static By ApplyAllSalesToBagCheckbox=By.xpath("//input[@data-ng-model='applyAllSalesToBag']");
 	static By loadingIcon = By.xpath("//div[@class='data-loading-PLU ng-hide']");
-	
+	static String bagID;
 	
 	
 	
@@ -965,13 +965,22 @@ public static void selectBag() {
 	
 		e.printStackTrace();
 	}
-	Browser.instance.findElement(bagEntryField).sendKeys("2002");
+	Browser.instance.findElement(bagEntryField).sendKeys(bagID);
 	Browser.instance.findElement(bagEntryField).sendKeys(Keys.TAB);
 	wait.until(ExpectedConditions.elementToBeClickable(RetrieveButton)); 
 	Browser.instance.findElement(LocCodeDropdown).click();
 	Browser.instance.findElement(RetrieveButton).click();
 	wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 	
+}
+
+public static void checkoutBag() {
+	bagID= CheckoutBagsPage.BuildBagForCheckout();
+	CheckoutBagsPage.goTo();
+	CheckoutBagsPage.selectBadgeAndLoc();
+	CheckoutBagsPage.selectBag();
+	CheckoutBagsPage.saveCheckout();
+	CheckoutBagsPage.close();
 }
 
 
