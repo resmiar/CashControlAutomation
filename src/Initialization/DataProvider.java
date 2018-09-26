@@ -26,13 +26,13 @@ public class DataProvider {
 	try {
 		fileStream = new FileInputStream(FilePath);
 	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
+	
 		e.printStackTrace();
 	}
 	try {
 		workbook = new XSSFWorkbook(fileStream);
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	}
 	sheet = workbook.getSheet("Sheet1");
@@ -99,9 +99,81 @@ public class DataProvider {
 		returnValue = cell.getStringCellValue();
 		break;
 	}
+	case ("Default PLU"):
+	{
+		row = sheet.getRow(9);
+		cell = row.getCell(2);
+		returnValue = cell.getStringCellValue();
+		break;
+	}
+	case ("Tax Included PLU"):
+	{
+		row = sheet.getRow(10);
+		cell = row.getCell(2);
+		returnValue = cell.getStringCellValue();
+		break;
+	}
+	case ("Plus Tax PLU"):
+	{
+		row = sheet.getRow(11);
+		cell = row.getCell(2);
+		returnValue = cell.getStringCellValue();
+		break;
+	}
+	
 	}
 	return returnValue;
 
 	}
 	
+	public static String getACValueOf(String inputValue)  {
+		try {
+			fileStream = new FileInputStream(FilePath);
+		} catch (FileNotFoundException e) {
+		
+			e.printStackTrace();
+		}
+		try {
+			workbook = new XSSFWorkbook(fileStream);
+		} catch (IOException e) {
+		
+			e.printStackTrace();
+		}
+		sheet = workbook.getSheet("Sheet1");
+		valueName = inputValue;
+		
+		switch(valueName) {
+		
+		case ("Inactive AC"):
+		{
+			row = sheet.getRow(12);
+			cell = row.getCell(2);
+			returnValue = cell.getStringCellValue();
+			break;
+		}
+		case ("AC1 Code"):
+		{
+			row = sheet.getRow(12);
+			cell = row.getCell(3);
+			returnValue = cell.getStringCellValue();
+			break;
+		}
+		case ("AC 2"):
+		{
+			row = sheet.getRow(13);
+			cell = row.getCell(2);
+			returnValue = cell.getStringCellValue();
+			break;
+		}
+		case ("AC2 Code"):
+		{
+			row = sheet.getRow(13);
+			cell = row.getCell(3);
+			returnValue = cell.getStringCellValue();
+			break;
+		}
+		}
+		return returnValue;
+
+		}
 	}

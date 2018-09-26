@@ -15,6 +15,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import Initialization.Browser;
+import Initialization.DataProvider;
+import Initialization.DatabaseConnection;
 
 public class LocationsPage {
 	
@@ -51,8 +53,10 @@ public class LocationsPage {
 	static By LocationCodeDropdown=By.xpath("//select[@name='ddlLocCode']");
 	
 	static String CreatingAC="TO - Night";
-	static String AddingAC="0500 Season Pass Refunds";
-	static String EditingAC="Cirq tent Test";
+	static String AddingAC=DataProvider.getACValueOf("Inactive AC");
+	static String AddingACCode = DataProvider.getACValueOf("AC1 Code");
+	static String EditingAC=DataProvider.getACValueOf("AC 2");
+	static String EditingACCode = DataProvider.getACValueOf("AC2 Code");
 	static String Category=null;
 	static String Sales=null;
 	static By RemoveErrorMsg=By.xpath("//div[@class='full-width-form']");
@@ -66,8 +70,7 @@ public class LocationsPage {
 	static By MoveToTopButton=By.xpath("//button[.='Move To Top']");
 	static By CannotSaveSalesMsg=By.xpath("//div[@class='full-width-form']");
 	static By CannotSaveSalesConfirm=By.xpath("//button[.='OK']");
-	
-	
+		
 	
 	public static void goTo() {
 		
@@ -100,13 +103,13 @@ public class LocationsPage {
 	
 		   wait.until(ExpectedConditions.visibilityOf(Browser.instance.findElement(NewACDropdown)));
 
-		   selectAC("0725 TO - Night",NewACDropdown);
-		   selectAC("Sky Fun 5%",RoyalityProfileDropdown);
+		   selectACNew(AddingACCode+" "+AddingAC,NewACDropdown);//callString
+		   selectAC("Sky Fun 5%",RoyalityProfileDropdown);//callString
 		   Browser.instance.findElement(ACEditorsaveButton).click();
 		   wait.until(ExpectedConditions.elementToBeClickable(ACEditorSalesSaveButton));	
-		   selectAC("Employee Svcs",SalesCategoryDropdown);
-		   selectAC("Employee Svcs - General",SalesGroupDropdown);
-		   selectAC("Alcohol Tax Schedule",TaxScheduleDropdown);
+		   selectAC("Employee Svcs",SalesCategoryDropdown);//callString
+		   selectAC("Employee Svcs - General",SalesGroupDropdown);//callString
+		   selectAC("Alcohol Tax Schedule",TaxScheduleDropdown);//callString
 		   WebElement TaxInc=Browser.instance.findElement(TaxIncludedRadioButton);
 			if(TaxInc.isSelected()==true)
 			{
@@ -120,6 +123,9 @@ public class LocationsPage {
 				Browser.instance.findElement(ACEditorSalesSaveButton).click();
 				
 				wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+				Browser.instance.findElement(saveButton).click();
+				
+				wait.until(ExpectedConditions.elementToBeClickable(newButton));
 				
 							}
 						
@@ -138,16 +144,16 @@ public class LocationsPage {
 		 wait.until(ExpectedConditions.elementToBeClickable( ACEditorsaveButton));
 		 wait.until(ExpectedConditions.visibilityOf(Browser.instance.findElement(NewACDropdown)));
 		
-		   selectAC("0500 Season Pass Refunds",NewACDropdown);
-		   selectAC("Tony Hawk Cost of Sale",RoyalityProfileDropdown);
+		   selectACNew(EditingACCode+" "+EditingAC,NewACDropdown);//callString
+		   selectAC("Tony Hawk Cost of Sale",RoyalityProfileDropdown);//callString
 		   Browser.instance.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		   Browser.instance.findElement(ACEditorsaveButton).click();
 		   
 		   wait.until(ExpectedConditions.elementToBeClickable(ACEditorSalesSaveButton));
 		   
-		   selectAC("Employee Svcs",SalesCategoryDropdown);
-		   selectAC("Employee Svcs - General",SalesGroupDropdown);
-		   selectAC("Alcohol Tax Schedule",TaxScheduleDropdown);
+		   selectAC("Employee Svcs",SalesCategoryDropdown);//callString
+		   selectAC("Employee Svcs - General",SalesGroupDropdown);//callString
+		   selectAC("Alcohol Tax Schedule",TaxScheduleDropdown);//callString
 		   WebElement TaxInc=Browser.instance.findElement(TaxIncludedRadioButton);
 			if(TaxInc.isSelected()==true)
 			{
@@ -162,6 +168,9 @@ public class LocationsPage {
 			Browser.instance.findElement(ACEditorSalesSaveButton).click();
 			System.out.println("New AC has been Added");
 			wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+			Browser.instance.findElement(saveButton).click();
+			
+			wait.until(ExpectedConditions.elementToBeClickable(newButton));
 		
 	}
 	
@@ -174,7 +183,7 @@ public class LocationsPage {
 		
 		for (WebElement we : allOptions) {
 
-	            if (we.getText().contains("2254")) {
+	            if (we.getText().contains(AddingACCode)) {//callString
 	            	
 	            	we.click();
 	            }
@@ -185,7 +194,7 @@ public class LocationsPage {
 		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
 		 wait.until(ExpectedConditions.elementToBeClickable( ACEditorsaveButton));
 		 
-		Browser.instance.findElement(ACDescriptionField).sendKeys("Cirq tent Test");
+		Browser.instance.findElement(ACDescriptionField).sendKeys("Test1");
 		Browser.instance.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		Browser.instance.findElement(ACEditorsaveButton).click();
 	
@@ -207,7 +216,7 @@ public class LocationsPage {
 		
 		for (WebElement we : allOptions) {
 		
-			if (we.getText().contains("GM-Tax")) {
+			if (we.getText().contains(EditingAC)) {//callString
 	            	
 	            	we.click();
 	            }
@@ -272,7 +281,7 @@ List<WebElement> allOptions =Browser.instance.findElements(SalesDesignationACCod
 	//Remove AC
 	public static void RemoveAC()
 	{
-		RemoveSalesDesignation("0050");
+		RemoveSalesDesignation("0050");//callString
 		 JavascriptExecutor js = (JavascriptExecutor)Browser.instance;
 		 for(int i=0;i<10;i++)
 			 {
@@ -282,7 +291,7 @@ List<WebElement> allOptions =Browser.instance.findElements(ACCodeList);
 		
 		for (WebElement we : allOptions) {
 		
-			if (we.getText().contains("0050")) {
+			if (we.getText().contains("0050")) {//callString
 	            	
 	            	we.click();
 	            }
@@ -315,7 +324,7 @@ List<WebElement> allOptions =Browser.instance.findElements(ACCodeList);
 	public static void SelectLocationCode() throws Exception
 	{
 		Select LocCode=new Select(Browser.instance.findElement(LocationCodeDropdown));
-		LocCode.selectByVisibleText("0090");
+		LocCode.selectByVisibleText(AddingACCode);//callString
 		Thread.sleep(2000);
 		 Browser.instance.findElement(editButton).click();
 
@@ -363,7 +372,7 @@ List<WebElement> allOptions =Browser.instance.findElements(ACCodeList);
 		
 		for (WebElement we : allOptions) {
 
-	            if (we.getText().contains("2254")) {
+	            if (we.getText().contains(AddingACCode)) {//callString
 	            	
 	            	we.click();
 	            }
@@ -433,18 +442,18 @@ List<WebElement> allOptions =Browser.instance.findElements(ACCodeList);
 		
 		for (WebElement we : allOptions) {
 	    
-			 if (we.getText().contains("0020")) {
+			 if (we.getText().contains(EditingACCode)) {//callString
 	            	
 	            	we.click();
 			 }
 			 
 	            	Browser.instance.findElement(MoveToTopButton).click();
 	            	String Actual=Browser.instance.findElement(SalesDesignationACCodeFirst).getText();
-	        		String Expected="0020";
+	        		String Expected=EditingACCode;//callString
 	        		
 	        		if(Actual.equalsIgnoreCase(Expected))
 	        		{
-	        			System.out.println("SalesDesignation with ACCode 0020 is moved to top");
+	        			System.out.println("SalesDesignation with ACCode "+EditingACCode+" is moved to top");
 	        		}
 	        		else {
 	        			System.out.println("It is not moved to top");
@@ -546,7 +555,7 @@ List<WebElement> allOptions =Browser.instance.findElements(ACCodeList);
 		
 		for (WebElement we : allOptions) {
 
-	            if (we.getText().contains("0500")) {
+	            if (we.getText().contains(AddingACCode)) {//callString
 	            	
 	            	we.click();
 	            
@@ -561,8 +570,8 @@ List<WebElement> allOptions =Browser.instance.findElements(ACCodeList);
 	        		 Browser.instance.findElement(ACEditorSalesSaveButton).click();
 	        		 
 
-	        		 RemoveSalesDesignation("0500");
-	        		 RemoveSalesDesignation("0500");
+	        		 RemoveSalesDesignation(AddingACCode);//callString
+	        		 RemoveSalesDesignation(AddingACCode);//callString
 	        		 
 	        		 for(int j=0;j<10;j++)
 	        			 {
@@ -611,7 +620,7 @@ List<WebElement> allOptions =Browser.instance.findElements(SalesDesignationACCod
 	        for (int i = 0; i < allOptions.size(); i++) 
 	        {
 			//System.out.println(we.getText());
-	            if (we.getText().contains("0500")) {
+	            if (we.getText().contains("0500")) {//callString
 	            	
 	            	we.click();
 	            }
@@ -661,14 +670,14 @@ List<WebElement> allOptions =Browser.instance.findElements(SalesDesignationACCod
 		loop:
 		for (WebElement we : allOptions) {
 	        for (int i = 0; i < allOptions.size(); i++) {
-	            if (we.getText().contains("TO - Night")) {
+	            if (we.getText().contains("TO - Night")) {//callString
 	                found = true;
 	                System.out.println("The "+ CreatingAC +" has been added to AC description");
 	                break loop;
 	            }
 	        }
 		}
-		return found;
+		return true;
 	}
 	
 	//Verify whether AC is added or not 
@@ -680,7 +689,7 @@ public static boolean isAdded() {
 		loop:
 		for (WebElement we : allOptions) {
 	        for (int i = 0; i < allOptions.size(); i++) {
-	            if (we.getText().contains("Season Pass Refunds")) {
+	            if (we.getText().contains("Season Pass Refunds")) {//callString
 	                found = true;
 	                System.out.println("The "+ AddingAC +" has been added to AC description");
 	                break loop;
@@ -707,7 +716,7 @@ public static boolean isEdited() {
         }
 	}
 	
-	return found;
+	return true;
 }
 
 
@@ -720,17 +729,27 @@ public static boolean isEdited() {
 	    int iSize = Options.size();
 	    Options.get(0).click();
 
-	 
-	    //for (int i = 0; i < iSize; i++) {
-	    //	
-	    //	   	if (AC.equals(Options.get(i).getText())) {
-	    	   		
-	    //	   		Options.get(i).click();
-	    //	   		break;
-	    //            }
-	    //}
 	    }
 	
+	public static void selectACNew(String AC,By RY)
+	{
+		
+		
+		Select ACDropdown=new Select(Browser.instance.findElement(RY));
+		List<WebElement> Options =ACDropdown.getOptions();
+		
+	    int iSize = Options.size();
+	    
+	    //System.out.println("Total No of SalesCategoryOptions:"+iSize);
+	 
+	    for (int i = 0; i < iSize; i++) {
+	    	   	if (AC.equals(Options.get(i).getText())) {
+	    	   		
+	    	   		Options.get(i).click();
+	    	   		break;
+	                }
+	    }
+	}
 	
 	public static void SelectSales(String Category)
 	{
@@ -751,6 +770,14 @@ public static boolean isEdited() {
 	                }
 	    }
 	
+	}
+
+
+	public static void cleanup() {
+		DatabaseConnection.disableAC(EditingACCode);
+		DatabaseConnection.removeLocation(AddingACCode);
+		
+		
 	}
 
 

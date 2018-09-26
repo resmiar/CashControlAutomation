@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import Initialization.Browser;
+import Initialization.DataProvider;
 import Initialization.DatabaseConnection;
 //import org.apache.xerces.util.SynchronizedSymbolTable;
 
@@ -102,6 +103,11 @@ public class AttendanceEntryPage {
 		}
 		
 		WebElement element = Browser.instance.findElement(By.linkText("Teller Transactions"));
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	    Actions action = new Actions(Browser.instance);
 	    action.moveToElement(element).build().perform(); 
 	    Browser.instance.findElement(By.linkText("Attendance Entry")).click();
@@ -188,7 +194,8 @@ public static void ClosedCCDay() throws Exception
 			   Browser.instance.findElement(clearButton).click();
 	
 		wait.until(ExpectedConditions.visibilityOfElementLocated(PLUdropdownlist));
-		SelectPLUAndAddFields("10000 | Main Gate Regular");
+		String pLUName = DataProvider.getValueOf("Default PLU" );
+		SelectPLUAndAddFields(pLUName);//Tax included
 			   
 		     
 		     }
@@ -196,8 +203,8 @@ public static void ClosedCCDay() throws Exception
 	//Method to Select PLU and add Fields
 	public static void SelectPLUAndAddFields(String s) throws Exception
 	{
-	Select PLUdropdown=new Select(Browser.instance.findElement(PLUdropdownlist)); 	
-	PLUdropdown.selectByVisibleText(s);
+		Select PLUdropdown=new Select(Browser.instance.findElement(PLUdropdownlist)); 	
+		PLUdropdown.selectByVisibleText(s);
 		   Thread.sleep(2000);
 		   Browser.instance.findElement(QuantityField).sendKeys(Keys.CONTROL,"a");
 		    Browser.instance.findElement(QuantityField).sendKeys(Keys.DELETE);
@@ -258,8 +265,8 @@ NumberFormatterandVerifyCalculations(ExpectedTotalTaxCode,Browser.instance.findE
 	
 	public static void AddmultiplePLUandVerifyCalculationsGrid() throws Exception
 	{
-
-		AddandVerifyNewPLU("100 | Parking Refund");
+		String pLUName = DataProvider.getValueOf("Tax Included PLU");
+		AddandVerifyNewPLU(pLUName); //Tax included
 				
 		}
 	
@@ -330,7 +337,8 @@ NumberFormatterandVerifyCalculations(ExpectedTotalTaxCode,Browser.instance.findE
 		   Browser.instance.findElement(clearButton).click();
 		 Select PLUdropdown=new Select(Browser.instance.findElement(PLUdropdownlist));
 	
-  PLUdropdown.selectByVisibleText("1000 | Bring-a-Friend-Free Ticket Voucher");
+   PLUdropdown.selectByVisibleText(DataProvider.getValueOf("Plus Tax PLU"));
+		
 
 	   Thread.sleep(2000);
 	   Browser.instance.findElement(QuantityField).sendKeys(Keys.CONTROL,"a");
@@ -354,7 +362,7 @@ NumberFormatterandVerifyCalculations(ExpectedTotalTaxCode,Browser.instance.findE
 		Thread.sleep(1000);
 		 Select PLUdropdown=new Select(Browser.instance.findElement(AttendanceBatchDropdownList));
 
-   	   PLUdropdown.selectByVisibleText("Test");
+   	   PLUdropdown.selectByVisibleText("TestEdited");
    	Browser.instance.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
    	Browser.instance.findElement(deleteButton).click();
    	if(Browser.instance.findElement(ConfirmDeleteButton).isDisplayed())
@@ -457,14 +465,14 @@ NumberFormatterandVerifyCalculations(ExpectedTotalTaxCode,Browser.instance.findE
 		 Browser.instance.findElement(newButton).click();
 		 wait.until(ExpectedConditions.invisibilityOfElementLocated(BufferImg)); 
 		 
-		 
+		 Browser.instance.findElement(AttendanceBatchDescriptionField).clear(); 
 		Browser.instance.findElement(AttendanceBatchDescriptionField).sendKeys("TestEntryModeAll");
 		  Browser.instance.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		   Browser.instance.findElement(clearButton).click();
 			 Browser.instance.findElement(EntryModeAllRadioButton).click();
 			Select PLUdropdown=new Select(Browser.instance.findElement(PLUdropdownlist));
-	  	  PLUdropdown.selectByVisibleText("10000 | Main Gate Regular");
-
+	  	  PLUdropdown.selectByVisibleText(DataProvider.getValueOf("Default PLU" ));
+			
 			   Thread.sleep(2000);
 			   Browser.instance.findElement(QuantityField).sendKeys(Keys.CONTROL,"a");
 			    Browser.instance.findElement(QuantityField).sendKeys(Keys.DELETE);
@@ -479,7 +487,8 @@ NumberFormatterandVerifyCalculations(ExpectedTotalTaxCode,Browser.instance.findE
 				   
 				   VerifyCalculations();
 				   AddtoGrid();
-				   AddandVerifyNewPLU("10043559 | AAA NAtional Summer Sale SFOT");
+				   String pLUName = DataProvider.getValueOf("Plus Tax PLU");
+				   AddandVerifyNewPLU(pLUName);//plus tax
 				   Browser.instance.findElement(cancelButton).click();
 				   wait.until(ExpectedConditions.elementToBeClickable(cancelConfirmButton));
 				   Browser.instance.findElement(cancelConfirmButton).click();

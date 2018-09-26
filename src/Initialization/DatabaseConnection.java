@@ -20,9 +20,7 @@ static int data2=0;
 	            String databaseURL=  DataProvider.getValueOf("DB URL");
 	            String user = DataProvider.getValueOf("DB User ID");
 	            String password = DataProvider.getValueOf("DB Password");
-	            System.out.println(databaseURL);
-	            System.out.println(user);
-	            System.out.println(password);
+	            
 	            connection = null;
 	            try {
 	            	Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -221,6 +219,50 @@ public static int updateDatatoDb(String inputQuery) {
 				
 				
 			}
+
+
+			public static void disableAC(String ACCode) {
+				String ActivityCenterID = returnACID("Select ActivityCenterID from ActivityCenters where AC_Code= '"+ACCode+"'");  
+				
+				if (ActivityCenterID!=null) {
+					updateDatatoDb("delete from AC_SG where ActivityCenterID = '"+ActivityCenterID+"'" );
+					updateDatatoDb("update ActivityCenters set ActiveFlag = 0 where ActivityCenterID = '"+ActivityCenterID+"'" );
+					
+					System.out.println("Deleted AC SG");
+				}
+			}
+
+
+			public static void removeLocation(String addingACCode) {
+				String ActivityCenterID = returnACID("Select ActivityCenterID from ActivityCenters where AC_Code= '"+addingACCode+"'");  
+				
+				if (ActivityCenterID!=null) {
+					updateDatatoDb("delete from AC_SG where ActivityCenterID = '"+ActivityCenterID+"'" );
+					updateDatatoDb("update ActivityCenters set ActiveFlag = 0 where ActivityCenterID = '"+ActivityCenterID+"'" );
+					updateDatatoDb("delete from Locations where ActivityCenterID = '"+ActivityCenterID+"'" );
+					
+					System.out.println("Deleted AC SG");
+				}
+			}
+			
+			public static String returnACID(String selectQuery) {
+				String resultString = null;
+				try {
+					dataBaseSetUp();
+					System.out.println("query: "+selectQuery);
+					statement = connection.createStatement();
+					rs = statement.executeQuery(selectQuery);
+					while (rs.next()) {
+					 resultString=rs.getString("ActivityCenterID");}
+					}
+				catch (SQLException ex) {
+			           ex.printStackTrace();}
+				
+
+				//String resultString = rs.toString(); 
+				System.out.println("The result string is "+resultString);
+				return resultString;						
+				}
 
 			
 			

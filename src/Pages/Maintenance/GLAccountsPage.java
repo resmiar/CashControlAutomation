@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import Initialization.Browser;
+import Initialization.DataProvider;
 
 public class GLAccountsPage {
 	static By maintenanceMenu = By.xpath("//a[contains(text(),'Maintenance')]");
@@ -33,7 +34,8 @@ public class GLAccountsPage {
 	static By confirmYesButton =By.xpath("//button[@data-bb-handler='Success']");
 	static By viewButton = By.xpath("//button[@ng-click='btnViewBtmClick();']");
 	static By viewACButton = By.xpath("//button[@ng-click='btnViewActivityCenterClick();']");
-	
+	static String acDescription = DataProvider.getACValueOf("Inactive AC");
+	static String ac2Description =DataProvider.getACValueOf("AC 2");
 	
 	
 	public static void goTo() {
@@ -70,7 +72,7 @@ public class GLAccountsPage {
 		for (WebElement we : ACDescription) {
 
 			
-	            if (we.getText().contains("SF Friends")) {
+	            if (we.getText().contains(acDescription)) {
 	            	
 	            	we.click();
 	           
@@ -114,6 +116,58 @@ public class GLAccountsPage {
 					wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 					Browser.instance.findElement(exitButton).click();
 				}
+				
+				wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(GLAcCentersList));
+				
+				List<WebElement> ACDescription2 =Browser.instance.findElements(GLAcCentersList);
+
+					for (WebElement we : ACDescription2) {
+
+						
+				            if (we.getText().contains(ac2Description)) {
+				            	
+				            	we.click();
+				           
+				        }
+					}
+					wait.until(ExpectedConditions.elementToBeClickable(GLAcCentersActivateButton));
+							Browser.instance.findElement(GLAcCentersActivateButton).click();
+							
+							wait.until(ExpectedConditions.visibilityOf(Browser.instance.findElement(ActivityBtnAlert)));
+							Browser.instance.findElement(ActivityBtnAlert).click();
+							
+								
+								
+							
+//							wait.until(ExpectedConditions.elementToBeClickable(ActivateSaveButton));
+							Thread.sleep(2000);
+							try {
+								
+							
+						WebElement Neither=Browser.instance.findElement(NeitherLocationCheckbox);
+						if(Neither.isSelected()==true)
+						{
+							System.out.println("Location Already assigned to Neither");
+						}
+						else {
+							System.out.println("Is enabling to Neither");
+							wait.until(ExpectedConditions.elementToBeClickable(NeitherLocationCheckbox));
+							Neither.click();
+							Browser.instance.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+							Browser.instance.findElement(ActivateSaveButton).click();
+							//wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+							wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+							Browser.instance.findElement(saveButton).click();
+							wait.until(ExpectedConditions.elementToBeClickable(exitButton));
+						}			
+				            
+							}
+							catch(Exception e)
+							{
+								Browser.instance.findElement(saveButton).click();
+								wait.until(ExpectedConditions.elementToBeClickable(exitButton));
+								Browser.instance.findElement(exitButton).click();
+							}
 			
 		}
 		

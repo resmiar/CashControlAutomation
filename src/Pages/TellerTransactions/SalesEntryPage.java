@@ -147,7 +147,7 @@ public class SalesEntryPage {
 
 wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 		
-		selectItem("3200",BagIdList);
+		selectItem(bagID,BagIdList);
 		Browser.instance.findElement(selectButton).click();
 		wait.until(ExpectedConditions.elementToBeClickable(RetrieveButton));
 		Browser.instance.findElement(RetrieveButton).click();
@@ -210,7 +210,7 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 		}
 	
 		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(BagIdList));
-		selectItem("3200",BagIdList);
+		selectItem(bagID,BagIdList);
 	
 		Browser.instance.findElement(selectButton).click();
 		Thread.sleep(1000);
@@ -232,7 +232,8 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 		 }
 		 wait.until(ExpectedConditions.elementToBeClickable(RetrieveButton));
 		 Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
-		 LocCode.selectByVisibleText("3100");
+		 //LocCode.selectByVisibleText("3100");
+		 LocCode.selectByIndex(2);;
 		Browser.instance.findElement(RetrieveButton).click();
 		
 	
@@ -576,7 +577,7 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 		}
 	
 		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(BagIdList));
-		selectItem("3002",BagIdList);
+		selectItem(bagID,BagIdList);
 		try {
 			Browser.instance.findElement(selectButton).click();
 			Thread.sleep(1000);
@@ -613,7 +614,8 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 				try {
 			 Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
 			 
-			 LocCode.selectByVisibleText("3290");
+			// LocCode.selectByVisibleText("3290");
+			 LocCode.selectByIndex(1);
 		}
 		 catch(Exception e)
 		{
@@ -621,7 +623,8 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 		 Browser.instance.findElement(DiffWorkingDateConfirm).click();
 		 Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
 		 
-		 LocCode.selectByVisibleText("3290");
+		 //LocCode.selectByVisibleText("3290");
+		 LocCode.selectByIndex(1);
 		}
 		 Browser.instance.findElement(BagUsageButton).click();
 		Thread.sleep(2000);
@@ -629,7 +632,8 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 		 wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 		 Thread.sleep(1000);
 		 Select Loc=new Select(Browser.instance.findElement(BagUsageLocationDropdown));
-		 Loc.selectByVisibleText("3290");
+		 //Loc.selectByVisibleText("3290");
+		 Loc.selectByIndex(1);
 		 wait.until(ExpectedConditions.visibilityOfElementLocated(ExclusiveLocationCheckbox));
 		 if(Browser.instance.findElement(ExclusiveLocationCheckbox).isSelected()==false)
 			  {
@@ -652,7 +656,8 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 			 Browser.instance.findElement(ExclusiveLocationCheckbox).click();
 			 Thread.sleep(1000);
 			 Select Loc1=new Select(Browser.instance.findElement(BagUsageLocationDropdown));
-			 Loc1.selectByVisibleText("3290");
+			 Loc1.selectByIndex(1);
+			 //Loc1.selectByVisibleText("3290");
 			 Browser.instance.findElement(saveBagUsageButton).click();
 
 		 }
@@ -676,14 +681,15 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 			Browser.instance.findElement(ItemSelectionButton).click();
 
 			wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(BagIdList));
-			selectItem("432",BagIdList);
+			selectItem(bagID,BagIdList);
 	
 		Browser.instance.findElement(selectButton).click();
 Thread.sleep(1000);
 
 			 Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
 			 
-			 LocCode.selectByVisibleText("0125");
+			 //LocCode.selectByVisibleText("0125");
+			 LocCode.selectByIndex(1);
 
 		 Browser.instance.findElement(BagUsageButton).click();
 			Thread.sleep(2000);
@@ -693,7 +699,8 @@ Thread.sleep(1000);
 			 
 Select LocCode1=new Select(Browser.instance.findElement(BagUsageLocationDropdown));
 			 
-			 LocCode1.selectByVisibleText("0125");
+			 //LocCode1.selectByVisibleText("0125");
+			 LocCode1.selectByIndex(2);
 			 Thread.sleep(1000);
 			 
 			 wait.until(ExpectedConditions.visibilityOfElementLocated(AutoSalesCheckbox));
@@ -743,7 +750,8 @@ Select LocCode1=new Select(Browser.instance.findElement(BagUsageLocationDropdown
 			try {
 				 Browser.instance.findElement(DiffWorkingDateConfirm).click();
 				 Thread.sleep(1000);
-				 LocCode1.selectByVisibleText("3050");
+				//LocCode1.selectByVisibleText("3050");
+				 LocCode1.selectByIndex(1);
 				 Browser.instance.findElement(saveBagUsageButton).click();
 				Thread.sleep(1000);
 				 Browser.instance.findElement(exitBagUsageButton).click();
@@ -782,10 +790,10 @@ public static void VerifyAutoSales() throws Exception
 		{
 			Browser.instance.findElement(DiffWorkingDateConfirm).click();
 		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(BagIdList));
-		selectItem("432",BagIdList);
+		selectItem(bagID,BagIdList);
 		}
 		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(BagIdList));
-		selectItem("432",BagIdList);
+		selectItem(bagID,BagIdList);
 		Browser.instance.findElement(selectButton).click();
 		Thread.sleep(1000);
 		String actual=Browser.instance.findElement(AutoSalesOnlyMsg).getText();
@@ -841,7 +849,7 @@ public static void VerifySystemOptions() throws Exception
 	}
 
 	wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(BagIdList));
-	selectItem("3017",BagIdList);
+	selectItem(bagID,BagIdList);
 
 	Browser.instance.findElement(selectButton).click();
 	Thread.sleep(2000);
@@ -960,11 +968,12 @@ public static void Tab() throws Exception
 public static void selectBag() {
 	WebDriverWait wait= new WebDriverWait(Browser.instance,60);
 	try {
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 	} catch (InterruptedException e) {
 	
 		e.printStackTrace();
 	}
+	Browser.instance.findElement(bagEntryField).clear();
 	Browser.instance.findElement(bagEntryField).sendKeys(bagID);
 	Browser.instance.findElement(bagEntryField).sendKeys(Keys.TAB);
 	wait.until(ExpectedConditions.elementToBeClickable(RetrieveButton)); 
