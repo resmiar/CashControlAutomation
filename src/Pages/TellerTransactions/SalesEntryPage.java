@@ -105,7 +105,7 @@ public class SalesEntryPage {
 	static By AutoSalesOnlyMsg=By.xpath("//div[@class='full-width-form']");
 	static By AutoSalesOnlyConfirmButton=By.xpath("//button[.='OK']");
 	static By ApplyAllSalesToBagCheckbox=By.xpath("//input[@data-ng-model='applyAllSalesToBag']");
-	static By loadingIcon = By.xpath("//div[@class='data-loading-PLU ng-hide']");
+	static By loadingIcon = By.xpath("//div[@class='data-loading-checkoutbag ng-hide']");
 	static String bagID;
 	
 	
