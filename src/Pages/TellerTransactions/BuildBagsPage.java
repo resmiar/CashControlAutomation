@@ -75,6 +75,11 @@ public class BuildBagsPage {
 	    //System.out.println(" Bag is converted to built"+Select);
 	    
 	   Browser.instance.findElement(saveButton).click();
+	   try {
+		Thread.sleep(2000);
+	} catch (InterruptedException e) {
+		e.printStackTrace();
+	}
 	   wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 	   Browser.instance.findElement(exitButton).click();
 	   //Browser.instance.findElement(exitButton).click();
@@ -86,7 +91,7 @@ public class BuildBagsPage {
 		{
 			//WebDriverWait wait = new WebDriverWait(Browser.instance,10);
 			Select BagTypeDescription=new Select(Browser.instance.findElement(BagTypeDropdown));
-			BagTypeDescription.selectByVisibleText("GREYBOX");
+			BagTypeDescription.selectByVisibleText("AutomationTestBagType");
 			Browser.instance.findElement(BuildBtn).click();
 			Thread.sleep(2000);
 			List<WebElement> EmptyBags = Browser.instance.findElements(EmptyBagsList);

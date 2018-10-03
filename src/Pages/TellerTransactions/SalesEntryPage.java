@@ -127,6 +127,11 @@ public class SalesEntryPage {
 		WebElement element = Browser.instance.findElement(By.linkText("Teller Transactions"));
 	    Actions action = new Actions(Browser.instance);
 	    action.moveToElement(element).build().perform(); 
+	    try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	    Browser.instance.findElement(By.linkText("Sales Entry")).click();
 	    Browser.instance.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
 	    WebDriverWait wait= new WebDriverWait(Browser.instance,10);
@@ -283,9 +288,9 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 		
 			 Browser.instance.findElement(ActCenterDetailsEnding).sendKeys("400.00");
 			 Browser.instance.findElement(ActCenterDetailsBeginning).sendKeys("250.00");
-			//Browser.instance.findElement(ActCenterDetailsOverride).sendKeys("45.00");
-			//Browser.instance.findElement(ActCenterDetailsQty).sendKeys("5");
-			//Browser.instance.findElement(ActCenterDetailsGross).sendKeys("200.00");
+			 Browser.instance.findElement(ActCenterDetailsOverride).sendKeys("45.00");
+			Browser.instance.findElement(ActCenterDetailsQty).sendKeys("5");
+			Browser.instance.findElement(ActCenterDetailsGross).sendKeys("200.00");
 			Tab();
 			Thread.sleep(1000);
 			double ActualGrossAmtEndReading = Double.parseDouble(Browser.instance.findElement(GrossAmtEndReading).getAttribute("value"));
@@ -341,7 +346,7 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 	//Verify New Calculations
 	public static void NewCalculations() throws Exception
 	{
-		Thread.sleep(2000);
+		Thread.sleep(5000);
 		 Browser.instance.findElement(QtyEndReading).sendKeys("1000");
 			 Clear(QtyBeginningReading);
 				 Browser.instance.findElement(QtyBeginningReading).sendKeys("500");
@@ -363,6 +368,16 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 				 Tab();
 	}
 	
+	//Save Entries
+		public static void SaveNewEntries() throws Exception
+		{
+			WebDriverWait wait= new WebDriverWait(Browser.instance,10);
+			Browser.instance.findElement(saveButton).click();
+			
+				 System.out.println("Saved the transaction");
+			 
+		}
+		
 	//Save Entries
 	public static void SaveEntries() throws Exception
 	{
@@ -406,79 +421,35 @@ wait.until(ExpectedConditions.elementToBeClickable(selectButton));
 	//Add a new Entry Entry
 	public static void AddNewtoExistingEntry() throws Exception
 	{
-		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
-		//Thread.sleep(1000);
-		//try {
-			//Browser.instance.findElement(ItemSelectionButton).click();
-		//}
-		//catch(Exception e)
-		//{
-		//	System.out.println("Click Intercepted Exception handled successfully");
-		//	Browser.instance.findElement(ItemSelectionButton).click();
-		//}
-	
-		//wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(BagIdList));
-		//selectItem("1026",BagIdList);
-	
-		//Browser.instance.findElement(selectButton).click();
-		//Thread.sleep(2000);
-
-		 //Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
-		/// LocCode.selectByVisibleText("4790");
-		// try {
-		//	 Browser.instance.findElement(RetrieveButton).click();
-		// }
-		//catch(Exception e){
-		//	Browser.instance.findElement(RetrieveButton).click();
-		//}
-	selectBag();
+		WebDriverWait wait= new WebDriverWait(Browser.instance,10);	
+		selectBag();
+		try {
+			Thread.sleep(1000);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Going to click new button");
 		
-	wait.until(ExpectedConditions.elementToBeClickable(newExistingSalesButton));
-	Browser.instance.findElement(newExistingSalesButton).click();
-	System.out.println("**************************Adding NEW to existing Sales Entries****************************");
+		}	
+		wait.until(ExpectedConditions.elementToBeClickable(newExistingSalesButton));
+		Browser.instance.findElement(newExistingSalesButton).click();
+		System.out.println("**************************Adding NEW to existing Sales Entries****************************");
 	}
 	
 	//Edit existing entry
 	public static void EditExistingEntry() throws Exception
 	{
 		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
-		//Thread.sleep(1000);
-		
-		//try {
-		//	Browser.instance.findElement(ItemSelectionButton).click();
-		//}
-		//catch(Exception e)
-		//{
-		//	System.out.println("Click Intercepted Exception handled successfully");
-		//	Browser.instance.findElement(ItemSelectionButton).click();
-		//}
-	
-		//wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(BagIdList));
-		//selectItem("1026",BagIdList);
-	
-		//Browser.instance.findElement(selectButton).click();
-		//Thread.sleep(2000);
-		//try {
-		//	Browser.instance.findElement(DiffWorkingDateConfirm).click();
-		//	 Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
-			 
-		//	 LocCode.selectByVisibleText("3290");
-		//}
-		// catch(Exception e)
-		//{
-		//Select LocCode=new Select(Browser.instance.findElement(LocCodeDropdown));
-		 
-		// LocCode.selectByVisibleText("3290");
-		//}
 
-
-		 //try {
-			 //Browser.instance.findElement(RetrieveButton).click();
-		 //}
-		//catch(Exception d){
-		//	Browser.instance.findElement(RetrieveButton).click();
-		//}
 		selectBag();
+		try {
+			Thread.sleep(1000);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Going to click edit button");
+		
+		}	
 	wait.until(ExpectedConditions.elementToBeClickable(editExistingSalesButton));
 	Browser.instance.findElement(existingLastSalesEntriesList).click();
 	Browser.instance.findElement(editExistingSalesButton).click();
@@ -978,6 +949,11 @@ public static void selectBag() {
 	Browser.instance.findElement(bagEntryField).sendKeys(Keys.TAB);
 	wait.until(ExpectedConditions.elementToBeClickable(RetrieveButton)); 
 	Browser.instance.findElement(LocCodeDropdown).click();
+	try {
+		Thread.sleep(2000);
+	} catch (InterruptedException e) {
+		e.printStackTrace();
+	}
 	Browser.instance.findElement(RetrieveButton).click();
 	wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 	

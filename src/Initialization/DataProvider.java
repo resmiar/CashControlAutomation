@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -155,7 +156,8 @@ public class DataProvider {
 		{
 			row = sheet.getRow(12);
 			cell = row.getCell(3);
-			returnValue = cell.getStringCellValue();
+			DecimalFormat df = new DecimalFormat("0000");
+			returnValue=df.format(cell.getNumericCellValue());
 			break;
 		}
 		case ("AC 2"):
@@ -169,7 +171,9 @@ public class DataProvider {
 		{
 			row = sheet.getRow(13);
 			cell = row.getCell(3);
-			returnValue = cell.getStringCellValue();
+			//cell.getStringCellValue();
+			DecimalFormat df = new DecimalFormat("0000");
+			returnValue=df.format(cell.getNumericCellValue());
 			break;
 		}
 		}

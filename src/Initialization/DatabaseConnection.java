@@ -125,6 +125,24 @@ public static int updateDatatoDb(String inputQuery) {
 		System.out.println("The result string is "+resultString);
 		return resultString;						
 		}
+	public static String returnCashTransID(String selectQuery) {
+		String resultString = null;
+		try {
+			dataBaseSetUp();
+			System.out.println("query: "+selectQuery);
+			statement = connection.createStatement();
+			rs = statement.executeQuery(selectQuery);
+			while (rs.next()) {
+			 resultString=rs.getString("bagUsageID");}
+			}
+		catch (SQLException ex) {
+	           ex.printStackTrace();}
+		
+
+		//String resultString = rs.toString(); 
+		System.out.println("The result string is "+resultString);
+		return resultString;						
+		}
 	
 	public static String returnBagTypeID(String selectQuery) {
 		String resultString = null;
@@ -178,7 +196,7 @@ public static int updateDatatoDb(String inputQuery) {
 					}
 				catch (SQLException ex) {
 			           ex.printStackTrace();}
-				System.out.println("Deleted 1009998 ba successsfully");						
+				System.out.println("Deleted 1009998 bag successsfully");						
 				}
 
 
@@ -187,8 +205,11 @@ public static int updateDatatoDb(String inputQuery) {
 				
 				if (bagUsageIDValue!=null) {
 					updateDatatoDb("delete from SalesTransactions where bagUsageID = '"+bagUsageIDValue+"'" );
-					updateDatatoDb("delete from CashTransDetails where bagUsageID = '"+bagUsageIDValue+"'" );
+					String cashTransID = returnCashTransID("select cashTransactionID from CashTransactions where bagUsageID = '"+bagUsageIDValue+"'" );	
+					if (cashTransID!=null) {
+					updateDatatoDb("delete from CashTransDetails where cashTransactioID = '"+cashTransID+"'" );
 					updateDatatoDb("delete from CashTransactions where bagUsageID = '"+bagUsageIDValue+"'");
+					}
 					updateDatatoDb("delete from bagusage where bagUsageID = '"+bagUsageIDValue+"'");
 					
 					System.out.println("Transaction entries deleted for BagForTest");
@@ -198,8 +219,11 @@ public static int updateDatatoDb(String inputQuery) {
 					
 					if (bagUsageIDValue!=null) {
 						updateDatatoDb("delete from SalesTransactions where bagUsageID = '"+bagUsageIDValue+"'" );
-						updateDatatoDb("delete from CashTransDetails where bagUsageID = '"+bagUsageIDValue+"'" );
+						String cashTransID = returnCashTransID("select cashTransactionID from CashTransactions where bagUsageID = '"+bagUsageIDValue+"'" );	
+						if (cashTransID!=null) {
+						updateDatatoDb("delete from CashTransDetails where cashTransactioID = '"+cashTransID+"'" );
 						updateDatatoDb("delete from CashTransactions where bagUsageID = '"+bagUsageIDValue+"'");
+						}
 						updateDatatoDb("delete from bagusage where bagUsageID = '"+bagUsageIDValue+"'");
 						
 						System.out.println("Transaction entries deleted for bagForTest1");
@@ -226,7 +250,8 @@ public static int updateDatatoDb(String inputQuery) {
 				
 				if (ActivityCenterID!=null) {
 					updateDatatoDb("delete from AC_SG where ActivityCenterID = '"+ActivityCenterID+"'" );
-					updateDatatoDb("update ActivityCenters set ActiveFlag = 0 where ActivityCenterID = '"+ActivityCenterID+"'" );
+					updateDatatoDb("delete from activityCenters where AC_CODE = '"+ACCode+"'");
+					updateDatatoDb("update GL_ActivityCenters set ActiveFlag = 0 where AC_CODE = '"+ACCode+"'");
 					
 					System.out.println("Deleted AC SG");
 				}
@@ -238,8 +263,9 @@ public static int updateDatatoDb(String inputQuery) {
 				
 				if (ActivityCenterID!=null) {
 					updateDatatoDb("delete from AC_SG where ActivityCenterID = '"+ActivityCenterID+"'" );
-					updateDatatoDb("update ActivityCenters set ActiveFlag = 0 where ActivityCenterID = '"+ActivityCenterID+"'" );
-					updateDatatoDb("delete from Locations where ActivityCenterID = '"+ActivityCenterID+"'" );
+					updateDatatoDb("update GL_ActivityCenters set ActiveFlag = 0 where AC_CODE = '"+addingACCode+"'" );
+					updateDatatoDb("delete from Locations where LocationCode = '"+addingACCode+"'" );
+					updateDatatoDb("delete from activityCenters where AC_CODE = '"+addingACCode+"'");
 					
 					System.out.println("Deleted AC SG");
 				}

@@ -109,7 +109,12 @@ public class AttendanceEntryPage {
 			e.printStackTrace();
 		}
 	    Actions action = new Actions(Browser.instance);
-	    action.moveToElement(element).build().perform(); 
+	    action.moveToElement(element).build().perform();
+	    try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	    Browser.instance.findElement(By.linkText("Attendance Entry")).click();
 	    WebDriverWait wait= new WebDriverWait(Browser.instance,10);
 	    wait.until(ExpectedConditions.elementToBeClickable(editButton));
@@ -306,8 +311,8 @@ NumberFormatterandVerifyCalculations(ExpectedTotalTaxCode,Browser.instance.findE
 		action.build().perform();
 		
 		Browser.instance.findElement(QuantityField).click();
-		Browser.instance.findElement(QuantityField).click();
-		 WebDriverWait wait= new WebDriverWait(Browser.instance,10);
+		Browser.instance.findElement(QuantityField).sendKeys(Keys.TAB);
+		 WebDriverWait wait= new WebDriverWait(Browser.instance,30);
 		    wait.until(ExpectedConditions.elementToBeClickable(RemoveButton));
 		     Browser.instance.findElement(RemoveButton).click();
 		     Browser.instance.findElement(saveButton).click();
@@ -327,11 +332,11 @@ NumberFormatterandVerifyCalculations(ExpectedTotalTaxCode,Browser.instance.findE
 
 		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
 	    wait.until(ExpectedConditions.elementToBeClickable(saveButton));
-	    WebElement wb = Browser.instance.findElement(AttendanceBatchDescriptionField);
-	    System.out.println(wb.isDisplayed());
-	    wb.click();
-	    wb.clear();
-
+	    //WebElement wb = Browser.instance.findElement(AttendanceBatchDescriptionField);
+	    //System.out.println(wb.isDisplayed());
+	   // wb.click();
+	    //wb.clear();
+	    Browser.instance.findElement(AttendanceBatchDescriptionField).clear();
 	    Browser.instance.findElement(AttendanceBatchDescriptionField).sendKeys("TestEdited");
 	    Browser.instance.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		   Browser.instance.findElement(clearButton).click();

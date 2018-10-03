@@ -66,9 +66,10 @@ static String SumStr=null;
 static By BagTypeColumn=By.xpath("//div[contains(@class,'ui-grid-cell-contents ng-binding ng-scope')]");
 public static String menuUrl;
 static By BagGrid=By.xpath("//div[@id='1523743526831-0-uiGrid-00L1-cell']/../../../..");
-public static String selecttender="U.S. Dollar - Accts Recv - Twix Voucher";
-public static String selecttender1="U.S. Dollar - Accts Recv - Groupon";
-public static String selecttender2="U.S. Dollar - Accts Recv - Feed The Children";
+public static String selecttender;
+//="U.S. Dollar - Accts Recv - Twix Voucher";
+//public static String selecttender1="U.S. Dollar - Accts Recv - Groupon";
+//public static String selecttender2="U.S. Dollar - Accts Recv - Feed The Children";
 static By ValueList=By.xpath("//div[@class='ui-grid-cell-contents ng-binding ng-scope']/../../..//div[3][contains(@class,'000B')]");
 static int RandomIdNew;
 public static String GetRandomBagId;
@@ -96,7 +97,7 @@ public static void AddBagTypeDetails()
 	WebDriverWait wait=new WebDriverWait(Browser.instance,10);
 	wait.until(ExpectedConditions.visibilityOfAllElements(Browser.instance.findElements(BagTypeDescriptionDropdown)));
 	Select BagTypeDescription=new Select(Browser.instance.findElement(BagTypeDescriptionDropdown));
-	//BagTypeDescription.selectByVisibleText("CERT");
+	
 	BagTypeDescription.selectByIndex(2);
 	Browser.instance.findElement(editButton).click();
 	
@@ -107,9 +108,15 @@ public static void AddBagTypeDetails()
 	Browser.instance.findElement(addButton).click();
 
 	wait.until(ExpectedConditions.elementToBeClickable(BagTypeSaveBtn));
+	try {
+		Thread.sleep(2000);
+	} catch (InterruptedException e) {
+		e.printStackTrace();
+	}
 	Select TenderFieldDescription=new Select(Browser.instance.findElement(tenderFieldDropdown));
-	TenderFieldDescription.selectByVisibleText(selecttender);
-
+	//TenderFieldDescription.selectByVisibleText(selecttender);
+	TenderFieldDescription.selectByIndex(1);
+	selecttender = TenderFieldDescription.getFirstSelectedOption().getText();
 	Browser.instance.findElement(tenderQty).clear();
 	Browser.instance.findElement(tenderQty).sendKeys("20");
 	
@@ -392,10 +399,11 @@ public static void selectBagTypeDetails(String TenderDesc) {
 
 //Checking the Duplicate id Message is coming or not
 
-public static void CreateduplicateBagIdVerify() 
+public static void CreateduplicateBagIdVerify() throws Exception 
 {
 	
 	Browser.instance.findElement(editButton).click();
+	Thread.sleep(3000);
 	WebDriverWait wait=new WebDriverWait(Browser.instance,10);
 	wait.until(ExpectedConditions.elementToBeClickable(addButton));
 	RandomId=GenerateRandomValue.generateRandomInteger();
@@ -631,14 +639,14 @@ public static void CreateBagId()
 				int RandomCode = GenerateRandomValue.generateRandomInteger();
 				Browser.instance.findElement(BagCodeField).sendKeys(RandomCode+"");
 				
-				Browser.instance.findElement(addButton).click();
-				wait.until(ExpectedConditions.elementToBeClickable(BagTypeSaveBtn));
-				Select TenderFieldDescription=new Select(Browser.instance.findElement(tenderFieldDropdown));
-				TenderFieldDescription.selectByVisibleText(selecttender);
-				Browser.instance.findElement(tenderQty).clear();
-				Browser.instance.findElement(tenderQty).sendKeys("20");
+				//Browser.instance.findElement(addButton).click();
+				//wait.until(ExpectedConditions.elementToBeClickable(BagTypeSaveBtn));
+				//Select TenderFieldDescription=new Select(Browser.instance.findElement(tenderFieldDropdown));
+				//TenderFieldDescription.selectByVisibleText(selecttender);
+				//Browser.instance.findElement(tenderQty).clear();
+				//Browser.instance.findElement(tenderQty).sendKeys("20");
 				
-				Browser.instance.findElement(BagTypeSaveBtn).click();			
+				//Browser.instance.findElement(BagTypeSaveBtn).click();			
 				wait.until(ExpectedConditions.elementToBeClickable(cancelButton));
 				
 				Browser.instance.findElement(saveButton).click();			

@@ -28,6 +28,7 @@ public class TenderEntryPage {
 	static By EntryTypeDropdown=By.xpath("//select[@ng-model='selectedObject.selectedEntryType']");
 	static By TimeDropdown=By.xpath("//select[@ng-model='selectedObject.selectedEntryTime']");
 	static By LocDropdown=By.xpath("//select[@ng-model='selectedObject.selectedLocationCode']");
+	static By bagIdinputField = By.xpath("//input[@ng-model = 'selectedObject.txtBagNum']");
 	static By BagSelectionButton=By.xpath("(//button[@class='btn-primary theme-commen-button'])[2]");
 	static By BufferImg=By.xpath("(//img)[1]");
 	static By DiffWorkingDateConfirm=By.xpath("//button[.='OK']");
@@ -241,10 +242,13 @@ public class TenderEntryPage {
 		SelectDropdown(EntryTypeDropdown,"Drop");
 		SelectDropdown(TimeDropdown,"2:00 pm");
 		Thread.sleep(2000);
-		Browser.instance.findElement(BagSelectionButton).click();
-		SelectItem(BagId,BagIdList);
-		Thread.sleep(1000);
-		Browser.instance.findElement(selectButton).click();
+		Browser.instance.findElement(bagIdinputField).click();
+		Browser.instance.findElement(bagIdinputField).sendKeys(BagId);
+		Browser.instance.findElement(bagIdinputField).sendKeys(Keys.TAB);
+		//Browser.instance.findElement(BagSelectionButton).click();
+		//SelectItem(BagId,BagIdList);
+		//Thread.sleep(1000);
+		//Browser.instance.findElement(selectButton).click();
 		
 
 		try {
@@ -517,9 +521,10 @@ NumberFormatterandVerifyCalculations(ExpectedScripTotalAmount,Browser.instance.f
 	  NumberFormatterandVerifyCalculations(ExpectedTransactionTotal,ActualTransactionTotal);
 	  
 	  WebDriverWait wait= new WebDriverWait(Browser.instance,10);
-	  Browser.instance.findElement(cancelButton).click();
-	  wait.until(ExpectedConditions.elementToBeClickable(CancelConfirm));
-	  Browser.instance.findElement(CancelConfirm).click();
+	  Browser.instance.findElement(saveButton).click();
+	  //Browser.instance.findElement(cancelButton).click();
+	  //wait.until(ExpectedConditions.elementToBeClickable(CancelConfirm));
+	  //Browser.instance.findElement(CancelConfirm).click();
 	 wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 	  
 	}
@@ -557,31 +562,28 @@ public static void VerifyExistingEntries() throws Exception
 		SelectDropdown(EntryTypeDropdown,"Drop");
 		SelectDropdown(TimeDropdown,"2:00 pm");
 		Thread.sleep(2000);
-		Browser.instance.findElement(BagSelectionButton).click();
-		SelectItem(bagID,BagIdList);
-		Thread.sleep(1000);
-		Browser.instance.findElement(selectButton).click();
+		//Browser.instance.findElement(BagSelectionButton).click();
+		//SelectItem(bagID,BagIdList);
+		//Thread.sleep(1000);
+		//Browser.instance.findElement(selectButton).click();
+		Browser.instance.findElement(bagIdinputField).clear();
+		Browser.instance.findElement(bagIdinputField).sendKeys(bagID);
+		Browser.instance.findElement(bagIdinputField).sendKeys(Keys.TAB);
 	 wait.until(ExpectedConditions.elementToBeClickable(ExistingTenderEntriesNewButton));
-VerifyTitle(ExistingTenderEntriesTitle,"Existing Tender Entries");
-Browser.instance.findElement(ExistingTenderEntriesNewButton).click();
-wait.until(ExpectedConditions.elementToBeClickable(BufferImg));
-wait.until(ExpectedConditions.elementToBeClickable(BillsCoinsTab));
-VerifyBillsandCoinsCalculations();
-Browser.instance.findElement(saveButton).click();
-wait.until(ExpectedConditions.elementToBeClickable(exitButton));
-Browser.instance.findElement(BagSelectionButton).click();
-SelectItem(bagID,BagIdList);
-Thread.sleep(1000);
-try
-{
-Browser.instance.findElement(selectButton).click();
-}
-catch(Exception t)
-{
-	Browser.instance.findElement(BagSelectionButton).click();
-	SelectItem(bagID,BagIdList);
-	Browser.instance.findElement(selectButton).click();
-}
+	 VerifyTitle(ExistingTenderEntriesTitle,"Existing Tender Entries");
+	 Browser.instance.findElement(ExistingTenderEntriesNewButton).click();
+	 wait.until(ExpectedConditions.elementToBeClickable(BufferImg));
+	 wait.until(ExpectedConditions.elementToBeClickable(BillsCoinsTab));
+	 VerifyBillsandCoinsCalculations();
+	 Browser.instance.findElement(saveButton).click();
+	 wait.until(ExpectedConditions.elementToBeClickable(exitButton));
+	 //Browser.instance.findElement(BagSelectionButton).click();
+	 //SelectItem(bagID,BagIdList);
+	 Browser.instance.findElement(bagIdinputField).click();
+		Browser.instance.findElement(bagIdinputField).sendKeys(bagID);
+		Browser.instance.findElement(bagIdinputField).sendKeys(Keys.TAB);
+	 Thread.sleep(1000);
+	 
  wait.until(ExpectedConditions.elementToBeClickable(ExistingTenderEntriesNewButton));
  Select select=new Select(Browser.instance.findElement(ExistingTenderEntriesDropdown));
 List<WebElement> Options = select.getOptions();
@@ -740,6 +742,11 @@ wait.until(ExpectedConditions.elementToBeClickable(exitButton));
 			CheckoutBagsPage.saveCheckout();
 			CheckoutBagsPage.close();
 		}
+
+	public static String getBagID() {
+		
+		return bagID;
+	}
 		
 		
 		

@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -16,6 +17,7 @@ public class CheckInBagsPage {
 
 	static By TransactionsMenu = By.xpath("//a[contains(text(),'Transactions')]");
 	static By exitButton=By.xpath("//span[.='Exit']");
+	static By bagIDField = By.id("bagAlias");
 	static By BagCheckInButton=By.xpath("(//button[@type='button'])[5]");	
 	static By BagIdItemSelectionList=By.xpath("//div[@class='ui-grid-cell-contents ng-binding ng-scope']/../../..//div[1][contains(@class,'coluiGrid')]");
 	static By SelectButton=By.xpath("//button[.='Select']");
@@ -48,16 +50,16 @@ public class CheckInBagsPage {
 	//Check in a Bag
 	public static void CheckInBag() throws Exception
 	{
+		String BagID = TenderEntryPage.getBagID();
 		WebDriverWait wait= new WebDriverWait(Browser.instance,10);
 	   
-		Browser.instance.findElement(BagCheckInButton).click();
-		SelectItem("2002",BagIdItemSelectionList);
-		Thread.sleep(1000);
-		Browser.instance.findElement(SelectButton).click();
+		Browser.instance.findElement(bagIDField).click();
+		Browser.instance.findElement(bagIDField).sendKeys(BagID);
+		Browser.instance.findElement(bagIDField).sendKeys(Keys.TAB);
 		 wait.until(ExpectedConditions.elementToBeClickable(exitButton));
-		 Robot robot = new Robot();
-			robot.keyPress(KeyEvent.VK_ENTER);
-		robot.keyRelease(KeyEvent.VK_ENTER);
+		 //Robot robot = new Robot();
+			//robot.keyPress(KeyEvent.VK_ENTER);
+		//robot.keyRelease(KeyEvent.VK_ENTER);
 		 wait.until(ExpectedConditions.invisibilityOfElementLocated(BufferImg));
 		 
 	}

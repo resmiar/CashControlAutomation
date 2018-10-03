@@ -32,7 +32,7 @@ public class Browser
 		{
 		System.setProperty("webdriver.gecko.driver", DataProvider.getValueOf("Driver Path")+"\\geckodriver.exe");
 		instance = new FirefoxDriver();
-		instance.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
+		instance.manage().timeouts().implicitlyWait(120, TimeUnit.SECONDS);
 		}
 		instance.manage().window().maximize();
 	}

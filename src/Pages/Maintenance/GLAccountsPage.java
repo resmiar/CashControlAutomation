@@ -18,14 +18,14 @@ public class GLAccountsPage {
 	static By GLAcCentersList=By.xpath("//div[@id='GlActivityCenters']//div[contains(@class, 'ui-grid-cell-contents ng-binding ng-scope')]/../../..//div[3]");
 	static By GLDeptList=By.xpath("//div[@id='GlDepartments']//div[contains(@class, 'ui-grid-cell-contents ng-binding ng-scope')]/../../..//div[3]");
 	static By GLAcCentersLast=By.xpath("(//div[@id='GlActivityCenters']//div[contains(@class, 'ui-grid-cell-contents ng-binding ng-scope')]/../../..//div[3])[last()]");
-	static By GLAcCentersActivateButton=By.xpath("(//button[.='Activate'])[3]");
+	static By GLAcCentersActivateButton=By.xpath("//button[@ng-show='showHideCtrl.showActivityCenterActive']");
 	static By GLAcCentersFirst=By.xpath("(//div[@id='GlActivityCenters']//div[contains(@class, 'ui-grid-cell-contents ng-binding ng-scope')]/../../..//div[3])[first()]");
 	static By GMTAX=By.xpath("(//div[@id='GlActivityCenters']//div[contains(@class,'ui-grid-cell-contents ng-binding ng-scope')]/../../..//div[3])[3]");
 	static By ActivityBtnAlert=By.xpath("//button[.='OK']");
-	static By NeitherLocationCheckbox=By.xpath("//label[.='Neither']");
+	static By NeitherLocationCheckbox=By.xpath("//input[@ng-change='ddlNeitherChangeEvent(3);']");
 	static By ActivateSaveButton=By.xpath("(//span[.='Save'])[1]");
 	static By saveButton=By.xpath("//span[.='Save']");
-	static By exitButton=By.xpath("//span[.='Exit']");
+	static By exitButton=By.xpath("//button[@data-ng-disabled='disableCtrls.btnExist']");
 	static By view=By.xpath("(//div[@role='rowgroup'])[6]");
 	static By Test=By.xpath("(//div[.='Employee Sales'])[2]");
 	static By gLHotSyncButton = By.xpath("//button[@ng-click = 'btnGlHotSyncClick();']");
@@ -79,43 +79,18 @@ public class GLAccountsPage {
 	        }
 		}
 		wait.until(ExpectedConditions.elementToBeClickable(GLAcCentersActivateButton));
-				Browser.instance.findElement(GLAcCentersActivateButton).click();
+		Browser.instance.findElement(GLAcCentersActivateButton).click();
+
+		Thread.sleep(2000);
 				
-				wait.until(ExpectedConditions.visibilityOf(Browser.instance.findElement(ActivityBtnAlert)));
-				Browser.instance.findElement(ActivityBtnAlert).click();
-				
-					
-					
-				
-//				wait.until(ExpectedConditions.elementToBeClickable(ActivateSaveButton));
-				Thread.sleep(2000);
-				try {
-					
-				
-			WebElement Neither=Browser.instance.findElement(NeitherLocationCheckbox);
-			if(Neither.isSelected()==true)
-			{
-				System.out.println("Location Already assigned to Neither");
-			}
-			else {
-				System.out.println("Is enabling to Neither");
-				wait.until(ExpectedConditions.elementToBeClickable(NeitherLocationCheckbox));
-				Neither.click();
-				Browser.instance.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-				Browser.instance.findElement(ActivateSaveButton).click();
-				//wait.until(ExpectedConditions.elementToBeClickable(saveButton));
-				wait.until(ExpectedConditions.elementToBeClickable(saveButton));
-				Browser.instance.findElement(saveButton).click();
-				wait.until(ExpectedConditions.elementToBeClickable(exitButton));
-			}			
-	            
-				}
-				catch(Exception e)
-				{
-					Browser.instance.findElement(saveButton).click();
-					wait.until(ExpectedConditions.elementToBeClickable(exitButton));
-					Browser.instance.findElement(exitButton).click();
-				}
+		WebElement Neither=Browser.instance.findElement(NeitherLocationCheckbox);
+		System.out.println("Is enabling to Neither");
+		wait.until(ExpectedConditions.elementToBeClickable(NeitherLocationCheckbox));
+		Neither.click();
+		Browser.instance.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		Browser.instance.findElement(ActivateSaveButton).click();
+		wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+
 				
 				wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(GLAcCentersList));
 				
@@ -127,47 +102,25 @@ public class GLAccountsPage {
 				            if (we.getText().contains(ac2Description)) {
 				            	
 				            	we.click();
-				           
-				        }
-					}
+								break;
+				              }
+				}
 					wait.until(ExpectedConditions.elementToBeClickable(GLAcCentersActivateButton));
 							Browser.instance.findElement(GLAcCentersActivateButton).click();
 							
-							wait.until(ExpectedConditions.visibilityOf(Browser.instance.findElement(ActivityBtnAlert)));
-							Browser.instance.findElement(ActivityBtnAlert).click();
 							
-								
-								
-							
-//							wait.until(ExpectedConditions.elementToBeClickable(ActivateSaveButton));
 							Thread.sleep(2000);
-							try {
-								
 							
-						WebElement Neither=Browser.instance.findElement(NeitherLocationCheckbox);
-						if(Neither.isSelected()==true)
-						{
-							System.out.println("Location Already assigned to Neither");
-						}
-						else {
 							System.out.println("Is enabling to Neither");
 							wait.until(ExpectedConditions.elementToBeClickable(NeitherLocationCheckbox));
-							Neither.click();
+							WebElement Neither2=Browser.instance.findElement(NeitherLocationCheckbox);
+							Neither2.click();
 							Browser.instance.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 							Browser.instance.findElement(ActivateSaveButton).click();
-							//wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 							wait.until(ExpectedConditions.elementToBeClickable(saveButton));
 							Browser.instance.findElement(saveButton).click();
 							wait.until(ExpectedConditions.elementToBeClickable(exitButton));
-						}			
-				            
-							}
-							catch(Exception e)
-							{
-								Browser.instance.findElement(saveButton).click();
-								wait.until(ExpectedConditions.elementToBeClickable(exitButton));
-								Browser.instance.findElement(exitButton).click();
-							}
+
 			
 		}
 		
@@ -176,6 +129,7 @@ public class GLAccountsPage {
 	public static void Exit()
 	{
 
+		System.out.println("Going to close GL screen");
 		Browser.instance.findElement(exitButton).click();
 		Browser.instance.manage().timeouts().implicitlyWait(20,TimeUnit.SECONDS);
 		WebDriverWait wait=new WebDriverWait(Browser.instance,10);
